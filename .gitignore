@@ -1,0 +1,37 @@
+# Node.js
+node_modules/
+
+# Build files
+build/
+dist/
+out/
+*.log
+yarn-error.log
+
+# Dependency directories
+pnpify/
+.cache/
+.npm/
+
+# IDE files
+.vscode/
+.idea/
+
+# Compiled files
+*.pnp.js
+*.pnp.cjs
+*.tsbuildinfo
+*.json
+*.js
+
+# Tailwind CSS
+dist/
+.cache-loader/
+
+# Editor-specific files
+*.swp
+*.swo
+*.swn
+*.swm
+.DS_Store
+Thumbs.db
