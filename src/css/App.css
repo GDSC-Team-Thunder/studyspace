@@ -9,17 +9,21 @@
 .App {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: auto;
+
   flex-direction: column;
   height: 100vh;
 }
 
-.container {
+.top-level {
   display: flex;
   justify-content: center;
   flex-direction: row;
   height: 100vh;
+  width: 97%;
 }
+
 .middle-container {
   position: relative;
 
@@ -29,7 +33,7 @@
 
   margin: auto;
   height: 85%;
-  width: 44%;
+  width: 48%;
   border-radius: 25px;
 }
 
@@ -37,7 +41,7 @@
   position: absolute;
 
   background-color: #FCFBF8;
-  opacity: 0.5;
+  opacity: 0.65;
   border-radius: 25px;
 
   top: 0;
@@ -48,13 +52,12 @@
 
 .middle-content {
   position: absolute;
-  text-align: center;
-  margin: auto;
-}
+  width: 75%;
+  height: 100%;
 
-.timer-text{
-  margin: 0px 0;
-  font-size: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .side-container {
@@ -66,7 +69,7 @@
 
   margin: auto;
   height: 85%;
-  width: 25%;
+  width: 24%;
   border-radius: 25px;
 }
 
@@ -74,7 +77,7 @@
   position: absolute;
 
   background-color: #FCFBF8;
-  opacity: 0.5;
+  opacity: 0.65;
   border-radius: 25px;
 
   top: 0;

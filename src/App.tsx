@@ -6,10 +6,7 @@ import './css/App.css';
 function App() {
   return (
     <div className = "App">
-      {/* <div className = "header">
-        <Header />
-      </div> */}
-      <div className="container">
+      <div className="top-level">
           <Left />
           <Timer />
           <Right />
