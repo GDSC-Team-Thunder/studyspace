@@ -1,0 +1,38 @@
+
+.timer-button{
+    width: 165px;
+}
+
+.timer-text{
+    font-size: 120px;
+  }
+
+.queue-text{
+    font-size: 20px;
+}
+
+.queue-container{
+    background-color: #f8ebfc;
+    border-radius: 25px;
+    width: 100%;
+    height: 35px;
+    padding: 6px 13px;
+}
+
+.section-button{
+    background-color: #FFF9F9;
+    color: #260093;
+    border: 2.5px solid #E55ABE;
+
+    font-size: 20px;
+    width: 165px;
+    padding: 10px 0px;
+}
+.section-button:hover{background-color:#E55ABE;}
+
+.section-button:active{
+    background-color: #E55ABE;
+    color: #FFF9F9;
+    border: none;
+    outline: none;
+}

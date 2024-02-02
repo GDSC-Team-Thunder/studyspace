@@ -1,11 +1,25 @@
 import { useState, useEffect } from "react";
+import Pause from '../assets/settings-bod.svg';
+import Settings from '../assets/settings-bold.svg';
+import '../css/timer.css';
 
 const Timer = () => {
-    const [total, setTotal] = useState(1500);
-    const [time, setTime] = useState("25:00");
+    const [sections, setSections] = useState({
+        pomodoro: { duration: 1500, symbol: "⭐ " },
+        short: { duration: 300, symbol: "🌙 " },
+        long: { duration: 900, symbol: "🌕 " },
+    })
+    const [total, setTotal] = useState(sections.pomodoro.duration);
+    const [time, setTime] = useState();
     const [isRunning, setIsRunning] = useState(false);
+    const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "])
 
     useEffect(() => {
+        updateTimer();
+        if (total === 0) {
+            queueNext();
+        }
+
         if (isRunning) {
             const intervalId = setInterval(() => {
                 setTotal(prevTotal => (prevTotal > 0 ? prevTotal - 1 : prevTotal));
@@ -14,12 +28,23 @@ const Timer = () => {
                 updateTimer();
                 return () => clearInterval(intervalId);
         }
-
     }, [isRunning, total]);
 
-    const handleButtonClick = () => {
+    const timerButton = () => {
         setIsRunning(prevIsRunning => !prevIsRunning);
-      };
+    };
+    const pomodoroButton = () => {
+        setQueue(prevQueue => [...prevQueue, sections.pomodoro.symbol]);
+    };
+    const shortButton = () => {
+        setQueue(prevQueue => [...prevQueue, sections.short.symbol]);
+    };
+    const longButton = () => {
+        setQueue(prevQueue => [...prevQueue, sections.long.symbol]);
+    };
+    const clearQueue = () => {
+        setQueue([]);
+    };
 
     const getTimeRemaining = () => {
         var temp = total;
@@ -35,6 +60,21 @@ const Timer = () => {
             seconds,
         };
     };
+
+    const getDurationBySymbol = (symbol: string) => {
+        const section = Object.values(sections).find((s) => s.symbol === symbol);
+        return section ? section.duration : 0;
+    };
+
+    const queueNext = () => {
+        queue.shift();
+        const newIcon = queue[0];
+
+        const newTime = getDurationBySymbol(newIcon)
+        console.log(newTime)
+        setTotal(newTime);
+
+    }
  
     const updateTimer = () => {
         let { hours, minutes, seconds } =
@@ -59,8 +99,24 @@ const Timer = () => {
             <div className='middle-bg'>
             </div>
             <div className='middle-content'>
-                <h1 className='timer-text'>{time}</h1>
-                <button onClick={handleButtonClick} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                <div className='flex flex-col items-center'>
+                    <h1 className='timer-text'>{time}</h1>
+                    <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                    <br></br>
+                    <div className='flex justify-center align-middle space-x-2'>
+                        <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
+                        <button onClick={shortButton} className='section-button'>short break 🌙</button>
+                        <button onClick={longButton} className='section-button'>long break 🌕</button>
+                    </div>
+                    <div className='flex flex-col w-full text-left'>
+                        <h2 className='text-[20px] ml-1 my-1'>queue</h2>
+                        <div className='queue-container'>
+                            <p>{queue}</p>
+                        </div>
+                        {/* <button onClick={clearQueue}>CLEAR :3</button> */}
+                    <div></div>
+                </div>
+                </div>
             </div>
         </div>
     );
