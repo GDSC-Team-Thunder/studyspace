@@ -34,7 +34,6 @@ button {
   outline: none;
   color: #FFF9F9;
 
-  padding: 10px 0px;
   border-radius: 35px;
   text-align: center;
   text-decoration: none;
@@ -44,7 +43,6 @@ button {
   font-size: 25px;
   font-weight: 500;
 }
-button:hover{background-color:#FF9C06;}
 
 /* @media (prefers-color-scheme: light) {
   :root {

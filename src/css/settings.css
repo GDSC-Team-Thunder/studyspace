@@ -1,0 +1,16 @@
+.settings{
+    height: 30%;
+    width: 30%;
+}
+
+.settings-bg{
+    position: absolute;
+  
+    background-color: #FCFBF8;
+    border-radius: 25px;
+  
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
