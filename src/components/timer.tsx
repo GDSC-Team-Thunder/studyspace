@@ -18,10 +18,17 @@ const Timer = () => {
     const [time, setTime] = useState();
     const [isRunning, setIsRunning] = useState(false);
     const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "]);
+    const [loopCurrent, setLoopCurrent] = useState(0);
+    const [loopQueue, setLoopQueue] = useState<string[]>([]);
+    const [svgColor, setSvgColor] = useState('#260093');
 
     useEffect(() => {
         updateTimer();
+
         if (total === 0) {
+            if (loopQueue.length != 0) {
+                loopQueueNext();
+            }
             queueNext();
         }
 
@@ -74,6 +81,9 @@ const Timer = () => {
         setTotal(0);
         setIsRunning(false);
     };
+    const loopButton = () => {
+        setLoopQueue(queue);
+    }
 
     const getTimeRemaining = () => {
         var temp = total;
@@ -100,9 +110,18 @@ const Timer = () => {
         const newIcon = queue[0];
 
         const newTime = getDurationBySymbol(newIcon)
-        console.log(newTime)
         setTotal(newTime);
 
+    }
+    const loopQueueNext = () => {
+        if (loopCurrent == loopQueue.length) {
+            setLoopCurrent(0);
+        } else {
+            setLoopCurrent(loopCurrent + 1);
+        }
+
+        const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
+        setTotal(newTime);
     }
  
     const updateTimer = () => {
@@ -133,7 +152,7 @@ const Timer = () => {
                     <div className='flex'>
                         <Popup
                         trigger={
-                            <button className='bg-transparent p-0'>
+                            <button onClick={loopButton} className='bg-transparent p-0'>
                                 <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
                             </button>
                         } 
@@ -142,7 +161,10 @@ const Timer = () => {
                         </Popup>
                         <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
                         <button className='bg-transparent p-0'>
-                            <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Loop} alt="loop"></img>
+                            <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Loop} alt="settings"></img>
+                            {/* <svg className='w-[50px] h-[50px] mx-4 flex-shrink-0'>
+                                    <use xlinkHref={Loop}></use>
+                            </svg> */}
                         </button>
                     </div>
                     <br></br>

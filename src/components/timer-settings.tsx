@@ -2,8 +2,11 @@ import { useState } from "react";
 import XIcon from '../assets/x-icon.svg';
 import '../css/settings.css';
 
-const Settings = ({ sections, setSections}) => {
-  
+const Settings = ({ sections, setSections }) => {
+    const settingsForm = [
+      {},
+    ];
+
     return (
       <div className='settings'>
         {/* <div className='settings-bg'></div> */}
@@ -14,6 +17,7 @@ const Settings = ({ sections, setSections}) => {
             </button>
         </div>
         <p>pomodoro length:</p>
+
         <p>short break length:</p>
         <p>long break length:</p>
         <p>theme:</p>

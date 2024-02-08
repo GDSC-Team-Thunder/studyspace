@@ -13,6 +13,7 @@ export default {
         bgWhite: '#FCFBF8',
       },
     },
-  },ins: [],
+  },
+  ins: [],
 }
 
