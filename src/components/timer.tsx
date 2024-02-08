@@ -1,22 +1,34 @@
 import { useState, useEffect } from "react";
-import Pause from '../assets/settings-bod.svg';
+import Reset from '../assets/trash.svg';
+import Delete from '../assets/delete-arrow.svg';
 import Settings from '../assets/settings-bold.svg';
+import Loop from '../assets/infinity-loop.svg';
+import Popup from 'reactjs-popup';
+import SettingsMenu from './timer-settings';
+import 'reactjs-popup/dist/index.css';
 import '../css/timer.css';
 
 const Timer = () => {
     const [sections, setSections] = useState({
-        pomodoro: { duration: 1500, symbol: "⭐ " },
-        short: { duration: 300, symbol: "🌙 " },
-        long: { duration: 900, symbol: "🌕 " },
+        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
+        short: { duration: 300, symbol: "🌙 ", active: false},
+        long: { duration: 900, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState(sections.pomodoro.duration);
     const [time, setTime] = useState();
     const [isRunning, setIsRunning] = useState(false);
-    const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "])
+    const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "]);
+    const [loopCurrent, setLoopCurrent] = useState(0);
+    const [loopQueue, setLoopQueue] = useState<string[]>([]);
+    const [svgColor, setSvgColor] = useState('#260093');
 
     useEffect(() => {
         updateTimer();
+
         if (total === 0) {
+            if (loopQueue.length != 0) {
+                loopQueueNext();
+            }
             queueNext();
         }
 
@@ -34,17 +46,44 @@ const Timer = () => {
         setIsRunning(prevIsRunning => !prevIsRunning);
     };
     const pomodoroButton = () => {
+        if (queue.length == 0) {
+            setTotal(sections.pomodoro.duration);
+        }
         setQueue(prevQueue => [...prevQueue, sections.pomodoro.symbol]);
     };
     const shortButton = () => {
+        if (queue.length == 0) {
+            setTotal(sections.short.duration);
+        }
         setQueue(prevQueue => [...prevQueue, sections.short.symbol]);
     };
     const longButton = () => {
+        if (queue.length == 0) {
+            setTotal(sections.long.duration);
+        }
         setQueue(prevQueue => [...prevQueue, sections.long.symbol]);
+    };
+    const deleteButton = () => {
+        setQueue(prevQueue => {
+            const newQueue = [...prevQueue];
+            newQueue.pop();
+
+            if (newQueue.length == 0) {
+                setTotal(0);
+                setIsRunning(false);
+            }
+
+            return newQueue;
+          });
     };
     const clearQueue = () => {
         setQueue([]);
+        setTotal(0);
+        setIsRunning(false);
     };
+    const loopButton = () => {
+        setLoopQueue(queue);
+    }
 
     const getTimeRemaining = () => {
         var temp = total;
@@ -71,9 +110,18 @@ const Timer = () => {
         const newIcon = queue[0];
 
         const newTime = getDurationBySymbol(newIcon)
-        console.log(newTime)
         setTotal(newTime);
 
+    }
+    const loopQueueNext = () => {
+        if (loopCurrent == loopQueue.length) {
+            setLoopCurrent(0);
+        } else {
+            setLoopCurrent(loopCurrent + 1);
+        }
+
+        const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
+        setTotal(newTime);
     }
  
     const updateTimer = () => {
@@ -101,21 +149,44 @@ const Timer = () => {
             <div className='middle-content'>
                 <div className='flex flex-col items-center'>
                     <h1 className='timer-text'>{time}</h1>
-                    <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                    <div className='flex'>
+                        <Popup
+                        trigger={
+                            <button onClick={loopButton} className='bg-transparent p-0'>
+                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
+                            </button>
+                        } 
+                        modal >
+                            <SettingsMenu sections={sections} setSections={setSections}/>
+                        </Popup>
+                        <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                        <button className='bg-transparent p-0'>
+                            <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Loop} alt="settings"></img>
+                            {/* <svg className='w-[50px] h-[50px] mx-4 flex-shrink-0'>
+                                    <use xlinkHref={Loop}></use>
+                            </svg> */}
+                        </button>
+                    </div>
                     <br></br>
-                    <div className='flex justify-center align-middle space-x-2'>
+                    <div className='flex justify-center items-center space-x-2'>
                         <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
                         <button onClick={shortButton} className='section-button'>short break 🌙</button>
                         <button onClick={longButton} className='section-button'>long break 🌕</button>
                     </div>
-                    <div className='flex flex-col w-full text-left'>
+                    <div className='flex flex-col w-full text-left mt-2'>
                         <h2 className='text-[20px] ml-1 my-1'>queue</h2>
                         <div className='queue-container'>
-                            <p>{queue}</p>
+                            <p className='whitespace-nowrap overflow-hidden text-ellipsis'>{queue}</p>
+                            <div className='flex items-center'>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
+                                </button>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
+                                </button>
+                            </div>
                         </div>
-                        {/* <button onClick={clearQueue}>CLEAR :3</button> */}
-                    <div></div>
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
