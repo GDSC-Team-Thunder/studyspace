@@ -37,8 +37,8 @@ export default function List() {
         <div className="relative flex flex-col h-[85%]
          bg-[#FCFBF8] opacity-65 rounded-[25px] self-center w-[24%]">
             <label className="flex flex-row m-3">
-                <input className="flex flex-1 p-1 rounded mr-2 text-white" placeholder="Add text" value={addText} onChange={e => setAddText(e.target.value)}/>
-                <button disabled={addText.length == 0} onClick={addTask}>Add</button>
+                <input className="flex flex-1 p-1 bg-slate-200 pl-3 rounded-[25px] mr-2 text-black placeholder-black" placeholder="Add text" value={addText} onChange={e => setAddText(e.target.value)}/>
+                <button className="px-2.5 text-[17px]" disabled={addText.length == 0} onClick={addTask}>+</button>
             </label>
             <ul className="flex flex-col w-full">
                 {todo.map(element => <IncompleteTask task={element} onComplete={onComplete} onDelete={deleteIncomplete}/>)}
