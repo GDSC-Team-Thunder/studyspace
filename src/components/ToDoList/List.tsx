@@ -44,7 +44,7 @@ export default function List() {
             </div>
             <label className="flex flex-row m-3">
                 <input className="flex flex-1 p-1 bg-slate-200 pl-3 rounded-[25px] mr-2 text-black placeholder-black" placeholder="Add text" value={addText} onChange={e => setAddText(e.target.value)}/>
-                <button className="px-2.5 text-[17px]" disabled={addText.length == 0} onClick={addTask}>+</button>
+                <button className="flex rounded-full text-[17px] items-center" disabled={addText.length == 0} onClick={addTask}>+</button>
             </label>
         </div>
     )
