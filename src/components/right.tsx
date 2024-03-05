@@ -1,14 +1,13 @@
+import SideCol from "./SideCol";
 
-const Timer = () => {
+const Right = () => {
     return (
-        <div className='side-container'>
-            <div className='side-bg'>
-            </div>
-            <div className='side-text'>
-                    <h1>RIGHT :)</h1>
-            </div>
+      <SideCol>
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-bold">Right</h2>
         </div>
+      </SideCol>
     );
   };
   
-export default Timer;
+export default Right;

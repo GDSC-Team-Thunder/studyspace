@@ -2,6 +2,7 @@ import {useState} from "react";
 import Task from "./Task";
 import IncompleteTask from "./IncompleteTask";
 import CompleteTask from "./CompleteTask";
+import SideCol from "../SideCol";
 
 export default function List() {
     const [todo, editTodo] = useState<Task[]>([]);
@@ -34,7 +35,7 @@ export default function List() {
     }
 
     return (
-        <div className="relative flex flex-col h-[85%] bg-[#FCFBF8] opacity-65 rounded-[25px] self-center w-[24%] p-1 justify-between">
+        <SideCol>
             <div className="flex flex-col">
                 <span className="ml-5 mt-3 self-start font-bold text-[17px]">ToDo List</span>
                 <ul className="flex flex-col w-full">
@@ -46,6 +47,6 @@ export default function List() {
                 <input className="flex flex-1 p-1 bg-slate-200 pl-3 rounded-[25px] mr-2 text-black placeholder-black" placeholder="Add text" value={addText} onChange={e => setAddText(e.target.value)}/>
                 <button className="flex rounded-full text-[17px] items-center" disabled={addText.length == 0} onClick={addTask}>+</button>
             </label>
-        </div>
+        </SideCol>
     )
 }
