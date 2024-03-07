@@ -3,18 +3,12 @@ import { useState } from "react";
 export default function LoginPage() {
     const [newUser, setNewUser] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const handleLogin = () => {
-        //If this is a new user
-        if (newUser) {
-
-        }
-        else {
-
-        }
-
+    const handleLogin = () => {      
         setUsername("");
+        setEmail("");
         setPassword("");
     }
 
@@ -29,6 +23,11 @@ export default function LoginPage() {
                         placeholder="Username"
                         value={username}
                         onChange={e => setUsername(e.target.value)}/>
+                    <p className="flex self-start text-md mx-2">Email</p>
+                    <input className="flex h-11 p-1 bg-slate-200 pl-3 rounded-[25px] m-2 text-black placeholder-black" 
+                        placeholder="Email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}/>
                     <p className="text-md self-start text-md mx-2">Password</p>
                     <input className="flex h-11 p-1 bg-slate-200 pl-3 rounded-[25px] m-2 text-black placeholder-black"
                         placeholder="Password"
@@ -38,8 +37,10 @@ export default function LoginPage() {
                     <button className="flex m-2 px-3 items-center justify-center self-start" 
                         onClick={handleLogin}
                         disabled={username.length == 0 || password.length == 0}>{newUser ? "Create New Account" : "Login"}</button>
-                    <span className="self-start mt-3 mx-2 underline underline-offset-4"
-                        onClick={() => setNewUser(current => !current)}>{newUser ? "Existing user?" : "New user?"}</span>
+                    <div className="ml-2 mt-3 flex flex-row underline underline-offset-4">
+                        <p>{newUser ? "Already have an account?" : "Don't have an account?"}</p>{' '}
+                        <b onClick={() => setNewUser(current => !current)}>{newUser ? "Log in here." : "Sign up here."}</b>
+                    </div>
                 </div>
             </div>
         </div>
