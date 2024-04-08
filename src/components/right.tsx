@@ -1,10 +1,15 @@
 import SideCol from "./SideCol";
+import Scene from "./ThreeScene/Scene";
 
 const Right = () => {
     return (
       <SideCol>
         <div className="flex flex-col">
-          <h2 className="text-2xl font-bold">Right</h2>
+          <div className="flex flex-col h-full">
+            <div className="flex-1">
+              <Scene />
+            </div>
+          </div>
         </div>
       </SideCol>
     );

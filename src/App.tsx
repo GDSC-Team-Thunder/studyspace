@@ -9,13 +9,12 @@ function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(true);
 
   return (
-    <div className = "App">
-      {/* <div className="flex justify-center flex-row h-screen w-[97%]">
-          <List/>
-          <Timer />
-          <Right />
-      </div> */}
-      <LoginPage/>
+    <div className="App">
+      <div className="flex justify-center flex-row h-screen w-[97%]">
+        <List />
+        <Timer />
+        <Right />
+      </div>
     </div>
   );
 }
