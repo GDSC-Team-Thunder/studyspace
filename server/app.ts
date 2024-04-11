@@ -72,37 +72,32 @@ app.post("/auth/register", async (req, res) => {
 
 app.post("/auth/login", async (req, res) => {
   try {
-    const user = req.body;
-    const { email, password } = user;
+    const { email, password } = req.body;
 
-    const isUserExist = await User.findOne({
-      email: email,
-    });
+    const user = await User.findOne({ email });
 
-    if (!isUserExist) {
-      res.status(404).json({
+    if (!user) {
+      return res.status(404).json({
         status: 404,
         success: false,
         message: "User not found",
       });
-      return;
     }
 
-    const isPasswordMatched = isUserExist?.password === password;
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched) {
-      res.status(400).json({
+      return res.status(400).json({
         status: 400,
         success: false,
-        message: "wrong password",
+        message: "Incorrect password",
       });
-      return;
     }
 
     const jwt = require("jsonwebtoken");
     const JWT_SECRET_KEY = process.env.JWT_SECRET || console.log("ERROR");
     const token = jwt.sign(
-      { _id: isUserExist?._id, email: isUserExist?.email },
+      { _id: user._id, email: user.email },
       JWT_SECRET_KEY,
       {
         expiresIn: process.env.JWT_EXPIRES_IN,
@@ -112,7 +107,7 @@ app.post("/auth/login", async (req, res) => {
     res.status(200).json({
       status: 200,
       success: true,
-      message: "login success",
+      message: "Login successful",
       token: token,
     });
   } catch (error: any) {
