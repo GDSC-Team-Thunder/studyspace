@@ -34,7 +34,7 @@ app.listen(PORT, async () => {
 
 app.post("/auth/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -50,6 +50,7 @@ app.post("/auth/register", async (req, res) => {
 
     const newUser = await User.create({
       email,
+      username,
       password: hashedPassword, // Store hashed password
     });
 
