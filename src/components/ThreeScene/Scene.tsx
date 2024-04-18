@@ -17,7 +17,7 @@ const Scene = () => {
       // If mounted properly, create a scene
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+      const renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
       // TODO: Find a way to not hardcode the size
       renderer.setSize(400, 400);
 
@@ -28,21 +28,59 @@ const Scene = () => {
       // refContainer.current gives us the DOM element referenced
       refContainer.current.appendChild(renderer.domElement);
 
+      const starGeometry = new THREE.SphereGeometry(0.03, 6, 6);
+      const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const stars: THREE.Mesh[] = [];
+
+      for (let i = 0; i < 3000; i++) {
+        const star = new THREE.Mesh(starGeometry, starMaterial);
+        const [x, y, z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(100));
+        star.position.set(x, y, z);
+        scene.add(star);
+        stars.push(star);
+      }
+
       const geometry = new THREE.BoxGeometry(1, 1, 2);
-      const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const spaceship = new THREE.Mesh(geometry, material);
+      const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black edges
+      const faceMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff }); // White faces
+
+      const spaceship = new THREE.Mesh(geometry, faceMaterial);
       scene.add(spaceship);
 
+      const wireframe = new THREE.LineSegments(
+        new THREE.WireframeGeometry(geometry),
+        edgeMaterial
+      );
+
+      spaceship.add(wireframe); // Add wireframe as a child of spaceship
+
       camera.position.z = 3;
-      camera.position.y = 2.5;
+      camera.position.y = 1.5;
+      spaceship.rotation.x = 0.3;
 
       const animate = () => {
         requestAnimationFrame(animate);
 
-        spaceship.rotation.x += 0.01;
-        spaceship.rotation.y += 0.01;
+        if (spaceship.position.z > -10) {
+          spaceship.position.z -= 0.03;
+        }
 
-        spaceship.position.z -= 0.05;
+        spaceship.rotation.z += 0.02;
+
+        console.log(spaceship.position.z);
+
+        stars.forEach(star => {
+            star.position.z += 0.1; // Increase star speed
+            star.rotation.x += 0.01; // Make stars spin around x-axis
+            star.rotation.y += 0.01; // Make stars spin around y-axis
+          if (star.position.z > 50) {
+            // If a star moves out of the view, reset its position
+            star.position.z = -50;
+            star.position.x = THREE.MathUtils.randFloatSpread(100);
+            star.position.y = THREE.MathUtils.randFloatSpread(100);
+          }
+        });
+
 
         renderer.render(scene, camera);
       };
