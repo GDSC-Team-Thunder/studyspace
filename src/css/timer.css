@@ -1,7 +1,7 @@
 
 .timer-button{
     width: 165px;
-    padding: 10px 0px;
+    padding: 9px 0px;
 }
 .timer-button:hover{background-color: #FF9C06;}
 
@@ -9,6 +9,9 @@
     font-size: 110px;
     line-height: 145px;
     margin-top: 35px;
+
+    font-family: Poppins;
+    font-weight: 500;
   }
 
 .queue-text{
@@ -16,7 +19,7 @@
 }
 
 .queue-container{
-    background-color: #f8ebfc;
+    background-color: #1D006F;
     border-radius: 25px;
     width: 100%;
     height: 35px;
@@ -29,19 +32,18 @@
 }
 
 .section-button{
-    background-color: #FFF9F9;
-    color: #260093;
-    border: 2.5px solid #E55ABE;
+    background-color: #1D006F;
+    color: #FDFDFD;
 
     font-size: 20px;
     width: 165px;
-    padding: 10px 0px;
+    padding: 12px 0px;
 }
-.section-button:hover{background-color:#E55ABE;}
+.section-button:hover{background-color:#F32FBC;}
 
 .section-button:active{
-    background-color: #E55ABE;
-    color: #FFF9F9;
+    background-color: #F32FBC;
+    color: #FDFDFD;
     border: none;
     outline: none;
 }
