@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function LoginPage() {
+export default function NewUserPage() {
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -16,7 +16,7 @@ export default function LoginPage() {
         <div className="flex justify-center items-center flex-row h-screen w-[97%]">
             <div className="flex flex-col justify-center items-center bg-slate-50/10 h-4/6 w-1/2 rounded-3xl">
                 <div className=" flex flex-col w-9/12 m-1 relative">
-                    <p className="flex self-start text-white font-semibold text-3xl mx-2 mb-8 relative">login to studyspace</p>
+                    <p className="flex self-start text-white font-semibold text-3xl mx-2 mb-8 relative">create your account</p>
                     <p className="flex self-start text-white text-md mx-2 relative">username</p>
                     <input className="flex h-11 p-1 bg-slate-200 pl-3 rounded-[10px] m-2 text-black placeholder-black" 
                         placeholder="Username"
@@ -37,8 +37,8 @@ export default function LoginPage() {
                         onClick={handleLogin}
                         disabled={username.length == 0 || password.length == 0}>log in</button>
                     <div className="ml-2 mt-3 flex flex-row self-center underline underline-offset-4">
-                        <p className="text-white">Don't have an account?</p>
-                        <b className="text-[#F32FBC]">Sign up here.</b>
+                        <p className="text-white">already have an account?</p>
+                        <b className="text-[#F32FBC]">log in here</b>
                     </div>
                 </div>
             </div>

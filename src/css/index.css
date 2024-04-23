@@ -6,7 +6,9 @@
 
   color-scheme: light dark;
   color: #260093;
-  background: linear-gradient(to bottom, #998ced, #f3d5f5, #FCFBF8);
+  background: url("./background.svg");
+  background-size: cover;
+  background-position: center;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
