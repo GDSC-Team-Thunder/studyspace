@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  friends: {
+    type: Array<String>,
+    default: {},
+  },
 });
 
 export const User = mongoose.model("Users", userSchema);
