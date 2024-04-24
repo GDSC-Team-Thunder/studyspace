@@ -58,11 +58,16 @@ const Scene = () => {
       camera.position.y = 1.5;
       spaceship.rotation.x = 0.3;
 
+      let decrement = 0.03;
+
       const animate = () => {
         requestAnimationFrame(animate);
 
         if (spaceship.position.z > -10) {
-          spaceship.position.z -= 0.03;
+          spaceship.position.z -= decrement;
+          if (decrement > 0) {
+            decrement -= 0.00001;
+          }
         }
 
         spaceship.rotation.z += 0.02;
@@ -71,8 +76,6 @@ const Scene = () => {
 
         stars.forEach(star => {
             star.position.z += 0.1; // Increase star speed
-            star.rotation.x += 0.01; // Make stars spin around x-axis
-            star.rotation.y += 0.01; // Make stars spin around y-axis
           if (star.position.z > 50) {
             // If a star moves out of the view, reset its position
             star.position.z = -50;
@@ -80,7 +83,6 @@ const Scene = () => {
             star.position.y = THREE.MathUtils.randFloatSpread(100);
           }
         });
-
 
         renderer.render(scene, camera);
       };
