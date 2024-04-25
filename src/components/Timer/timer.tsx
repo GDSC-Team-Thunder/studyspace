@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import Reset from '../assets/trash.svg';
-import Delete from '../assets/delete-arrow.svg';
-import Settings from '../assets/settings-bold.svg';
-import Loop from '../assets/infinity-loop.svg';
+import Reset from '../../assets/trash.svg';
+import Delete from '../../assets/delete-arrow.svg';
+import Settings from '../../assets/settings-bold.svg';
+import BlueLoop from '../../assets/infinity-blue.svg';
+import OrangeLoop from '../../assets/infinity-orange.svg';
 import Popup from 'reactjs-popup';
 import SettingsMenu from './timer-settings';
 import 'reactjs-popup/dist/index.css';
-import '../css/timer.css';
+import '../../css/timer.css';
 
 const Timer = () => {
     const [sections, setSections] = useState({
@@ -18,6 +19,7 @@ const Timer = () => {
     const [time, setTime] = useState();
     const [isRunning, setIsRunning] = useState(false);
     const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "]);
+    const [isLooping, setIsLooping] = useState(false);
     const [loopCurrent, setLoopCurrent] = useState(0);
     const [loopQueue, setLoopQueue] = useState<string[]>([]);
     const [svgColor, setSvgColor] = useState('#260093');
@@ -81,8 +83,10 @@ const Timer = () => {
         setTotal(0);
         setIsRunning(false);
     };
-    const loopButton = () => {
-        setLoopQueue(queue);
+    const loopButton = () => { 
+        setIsLooping(prevIsLooping => !prevIsLooping);
+        // if 
+        // setLoopQueue(queue);
     }
 
     const getTimeRemaining = () => {
@@ -143,29 +147,23 @@ const Timer = () => {
     };
 
     return (
-        <div className='middle-container'>
-            <div className='middle-bg'>
-            </div>
-            <div className='middle-content'>
-                <div className='flex flex-col items-center'>
+        <div className='relative flex flex-col bg-bgColor/10 h-[85%] w-[52%] rounded-[25px] self-center justify-center'>
+            <div className='relative flex flex-col w-[75%] items-center self-center mt-20'>
+                <div className='text-center'>
                     <h1 className='timer-text'>{time}</h1>
-                    <div className='flex'>
-                        <Popup
-                        trigger={
-                            <button onClick={loopButton} className='bg-transparent p-0'>
-                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
-                            </button>
-                        } 
-                        modal >
-                            <SettingsMenu sections={sections} setSections={setSections}/>
-                        </Popup>
-                        <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                    <div className='flex justify-center'>
                         <button className='bg-transparent p-0'>
-                            <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Loop} alt="settings"></img>
-                            {/* <svg className='w-[50px] h-[50px] mx-4 flex-shrink-0'>
-                                    <use xlinkHref={Loop}></use>
-                            </svg> */}
+                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
                         </button>
+                        <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                        { loopQueue.length == 0 ? 
+                            <button onClick={loopButton} className='bg-transparent p-0'>
+                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={BlueLoop} alt="settings"></img>
+                            </button>
+                            : <button onClick={loopButton} className='bg-transparent p-0'>
+                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={OrangeLoop} alt="settings"></img>
+                            </button>
+                        }
                     </div>
                     <br></br>
                     <div className='flex justify-center items-center space-x-2'>
@@ -173,20 +171,20 @@ const Timer = () => {
                         <button onClick={shortButton} className='section-button'>short break 🌙</button>
                         <button onClick={longButton} className='section-button'>long break 🌕</button>
                     </div>
-                    <div className='flex flex-col w-full text-left mt-2'>
-                        <h2 className='text-[20px] ml-1 my-1'>queue</h2>
-                        <div className='queue-container'>
-                            <p className='whitespace-nowrap overflow-hidden text-ellipsis'>{queue}</p>
-                            <div className='flex items-center'>
-                                <button className='bg-transparent p-0 m-0'>
-                                    <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
-                                </button>
-                                <button className='bg-transparent p-0 m-0'>
-                                    <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
-                                </button>
-                            </div>
+                </div>
+                <div className='flex flex-col w-full text-left mt-20'>
+                    <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
+                    <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
+                        <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
+                        <div className='flex items-center'>
+                            <button className='bg-transparent p-0 m-0'>
+                                <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
+                            </button>
+                            <button className='bg-transparent p-0 m-0'>
+                                <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
+                            </button>
                         </div>
-                    </div>
+                    </div>  
                 </div>
             </div>
         </div>
