@@ -10,10 +10,12 @@ type propType = {
 
 export default function IncompleteTask(props: propType) {
     return (
-        <li className="flex flex-row list-none p-3.5 w-full items-center justify-between bg-white my-1 rounded-md">
-            <img src={Unchecked} alt="Unchecked" onClick={() => props.onComplete(props.task)}/>
-            <span className="flex text-black truncate">{props.task.description}</span>
-            <img src={BlackX} alt="X" onClick={() => props.onDelete(props.task)}/>
+        <li className="flex flex-row list-none p-3.5 w-full items-center justify-between bg-white my-2 rounded-xl">
+            <div className="flex flex-auto items-center">
+                <img className="flex-initial mr-3 text-bold cursor-pointer" src={Unchecked} alt="Unchecked" onClick={() => props.onComplete(props.task)}/>
+                <span className="flex-initial text-black text-left overflow-wrap">{props.task.description}</span>
+            </div>
+            <img className="flex-end cursor-pointer" src={BlackX} alt="X" onClick={() => props.onDelete(props.task)}/>
         </li>
     );
 }
