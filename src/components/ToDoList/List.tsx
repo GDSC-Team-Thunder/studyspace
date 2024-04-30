@@ -36,7 +36,7 @@ export default function List() {
     return (
         <div className="relative flex flex-col h-[85%] bg-bgColor/10 rounded-[25px] self-center w-[22.5%] p-1 justify-between">
             <div className="flex flex-col">
-                <span className="ml-5 mt-3 self-start font-bold text-[17px]">ToDo List</span>
+                <span className="ml-5 mt-3 self-start font-bold text-[17px]">to-do list</span>
                 <ul className="flex flex-col w-full">
                     {todo.map(element => <IncompleteTask task={element} onComplete={onComplete} onDelete={deleteIncomplete}/>)}
                     {finished.map(element => <CompleteTask task={element} onIncomplete={onIncomplete} onDelete={deleteComplete}/>)}
