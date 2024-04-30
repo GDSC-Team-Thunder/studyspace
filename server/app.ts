@@ -117,3 +117,75 @@ app.post("/auth/login", async (req, res) => {
     });
   }
 });
+
+app.get("/:id", async (req, res) => {
+  try {
+    // Fetch current user from the database as JSON
+    const users = await User.findById(req.params.id);
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+});
+
+// Update (Put) method for updating user info in mongoDB
+app.put("/:id", async (req, res) => {
+  try {
+    // Extract data from request body
+    const {
+      username,
+      password,
+      pomodoro,
+      shortBreak,
+      longBreak,
+      timeSpent,
+      friends,
+    } = req.body;
+
+    // Find the user by ID
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: `User ${req.params.id} not found` });
+    }
+
+    let hashedPassword;
+    //Generate hashed password for updated password
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(password, salt);
+    }
+
+    // Update user properties
+    user.username = username ?? user.username; // Only update if it is provided
+    user.password = hashedPassword ?? user.password;
+    user.pomodoro = pomodoro ?? user.pomodoro;
+    user.shortBreak = shortBreak ?? user.shortBreak;
+    user.longBreak = longBreak ?? user.longBreak;
+    user.timeSpent = timeSpent ?? user.timeSpent;
+    user.friends = friends ?? user.friends;
+
+    // Save the updated user
+    const updatedUser = await user.save();
+    return res.status(200).json(updatedUser);
+  } catch (err: any) {
+    const errorMessage = err instanceof Error ? err.message : err.toString();
+    return res.status(400).send(errorMessage);
+  }
+});
+
+// Delete operation, for removing user from mongoDB
+app.delete("/:id", async (req, res) => {
+  try {
+    // Find the user by ID and delete it
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: `User not found` });
+    }
+    return res.status(200).json({
+      message: `User deleted successfully`,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err });
+  }
+}); // End Delete Route
