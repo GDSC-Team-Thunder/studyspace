@@ -37,12 +37,19 @@ export default function List() {
     );
   };
 
+  const handleKeyEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key == "Enter" && addText.length != 0) {
+      addTask();
+    }
+  };
+
   return (
-    <div className="relative flex flex-col h-[85%] bg-bgColor/10 rounded-[25px] self-center w-[22.5%] p-1 justify-between">
+    <div
+      className="relative flex flex-col h-[85%] bg-bgColor/10 
+            rounded-[25px] self-center w-[22.5%] py-5 px-4 justify-between"
+    >
       <div className="flex flex-col">
-        <span className="ml-5 mt-3 self-start font-bold text-[17px]">
-          ToDo List
-        </span>
+        <span className="my-3 self-start font-bold text-2xl">to-do list</span>
         <ul className="flex flex-col w-full">
           {todo.map((element) => (
             <IncompleteTask
@@ -60,15 +67,19 @@ export default function List() {
           ))}
         </ul>
       </div>
-      <label className="flex flex-row m-3">
+      <label className="flex flex-row items-center justify-between">
         <input
-          className="flex flex-1 p-1 bg-slate-200 pl-3 rounded-[25px] mr-2 text-black placeholder-black"
-          placeholder="Add text"
+          className="flex-grow pl-3 mr-1 bg-slate-200 rounded-[25px] text-black placeholder-gray-500 h-full"
+          placeholder="add items here..."
           value={addText}
           onChange={(e) => setAddText(e.target.value)}
+          onKeyDown={handleKeyEvent}
         />
         <button
-          className="flex rounded-full text-[17px] items-center"
+          className={`rounded-full text-2xl font-bold items-center 
+                    py-2 px-4 h-full cursor-pointer ${
+                      addText.length == 0 && "bg-gray-400"
+                    }`}
           disabled={addText.length == 0}
           onClick={addTask}
         >
