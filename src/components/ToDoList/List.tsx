@@ -38,10 +38,10 @@ export default function List() {
   };
 
   return (
-    <div className="relative flex flex-col h-[85%] bg-[#FCFBF8] opacity-65 rounded-[25px] self-center w-[24%] p-1 justify-between">
+    <div className="relative flex flex-col h-[85%] bg-bgColor/10 rounded-[25px] self-center w-[22.5%] p-1 justify-between">
       <div className="flex flex-col">
         <span className="ml-5 mt-3 self-start font-bold text-[17px]">
-          to-do list
+          ToDo List
         </span>
         <ul className="flex flex-col w-full">
           {todo.map((element) => (

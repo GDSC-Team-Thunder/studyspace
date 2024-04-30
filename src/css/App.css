@@ -14,6 +14,7 @@
 
   flex-direction: column;
   height: 100vh;
+  width: 100vh;
 }
 
 .middle-container {
@@ -25,15 +26,15 @@
 
   margin: auto;
   height: 85%;
-  width: 48%;
+  width: 50%;
   border-radius: 25px;
 }
 
 .middle-bg{
   position: absolute;
 
-  background-color: #FCFBF8;
-  opacity: 0.65;
+  background-color: #FDFDFD;
+  opacity: 0.1;
   border-radius: 25px;
 
   top: 0;
@@ -69,7 +70,7 @@
   position: absolute;
 
   background-color: #FCFBF8;
-  opacity: 0.65;
+  opacity: 0.1;
   border-radius: 25px;
 
   top: 0;
