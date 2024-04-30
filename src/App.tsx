@@ -1,6 +1,7 @@
 import Timer from './components/timer.tsx'
 import Right from './components/right.tsx'
 import List from './components/ToDoList/List.tsx';
+import Header from './components/header.tsx';
 import LoginPage from './components/loginPage/LoginPage.tsx';
 import './css/App.css';
 import { useState } from 'react';
@@ -10,12 +11,13 @@ function App() {
 
   return (
     <div className = "App">
-      {/* <div className="flex justify-center flex-row h-screen w-[97%]">
+      <Header />
+      <div className="flex justify-center flex-row h-screen w-[97%]">
           <List/>
           <Timer />
           <Right />
-      </div> */}
-      <LoginPage/>
+      </div>
+      {/* <LoginPage/> */}
     </div>
   );
 }

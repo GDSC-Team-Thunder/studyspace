@@ -7,6 +7,7 @@ import Popup from 'reactjs-popup';
 import SettingsMenu from './timer-settings';
 import 'reactjs-popup/dist/index.css';
 import '../css/timer.css';
+import ProgressBar from '../components/ProgressBar.tsx';
 
 const Timer = () => {
     const [sections, setSections] = useState({
@@ -167,6 +168,8 @@ const Timer = () => {
                             </svg> */}
                         </button>
                     </div>
+                    <br></br>
+                    <ProgressBar/>
                     <br></br>
                     <div className='flex justify-center items-center space-x-2'>
                         <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
