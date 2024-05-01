@@ -1,3 +1,4 @@
+import React from "react";
 import Timer from './components/timer.tsx'
 import Right from './components/right.tsx'
 import List from './components/ToDoList/List.tsx';
@@ -5,6 +6,7 @@ import Header from './components/header.tsx';
 import LoginPage from './components/loginPage/LoginPage.tsx';
 import './css/App.css';
 import { useState } from 'react';
+import { BrowserRouter as Router, Route} from "react-router-dom";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(true);
