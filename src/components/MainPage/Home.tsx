@@ -5,7 +5,7 @@ import "../../css/App.css";
 function Home() {
   return (
     <div className="App">
-      <div className="flex justify-betweem flex-row h-screen w-[95vw]">
+      <div className="flex justify-between flex-row h-screen w-[95vw]">
         <List />
         <Timer />
         <List />

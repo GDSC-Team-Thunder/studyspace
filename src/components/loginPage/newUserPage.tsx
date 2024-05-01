@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function NewUserPage() {
   const [username, setUsername] = useState<string>("");
