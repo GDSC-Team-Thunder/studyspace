@@ -70,6 +70,8 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
+let token;
+
 app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -96,13 +98,9 @@ app.post("/auth/login", async (req, res) => {
 
     const jwt = require("jsonwebtoken");
     const JWT_SECRET_KEY = process.env.JWT_SECRET || console.log("ERROR");
-    const token = jwt.sign(
-      { _id: user._id, email: user.email },
-      JWT_SECRET_KEY,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      }
-    );
+    token = jwt.sign({ _id: user._id, email: user.email }, JWT_SECRET_KEY, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
 
     res.status(200).json({
       status: 200,
@@ -117,12 +115,26 @@ app.post("/auth/login", async (req, res) => {
     });
   }
 });
+console.log("Heyooooooooooooooooooooooooooooo");
+console.log(token);
+export { token };
 
 app.get("/:id", async (req, res) => {
   try {
     // Fetch current user from the database as JSON
     const users = await User.findById(req.params.id);
     return res.status(200).json(users);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+});
+
+app.get("/auth", async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Fetch current user from the database as JSON
+    const user = await User.findOne({ email }); // Use findOne instead of findById
+    return res.status(200).json(user); // Changed 'users' to 'user' since it's a single user
   } catch (err) {
     return res.status(500).json({ error: err });
   }
