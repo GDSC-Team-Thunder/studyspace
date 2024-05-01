@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function LoginPage() {
+export default function NewUserPage() {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -18,7 +18,7 @@ export default function LoginPage() {
       <div className="flex flex-col justify-center items-center bg-slate-50/10 h-4/6 w-1/2 rounded-3xl">
         <div className=" flex flex-col w-9/12 m-1 relative">
           <p className="flex self-start text-white font-semibold text-3xl mx-2 mb-8 relative">
-            login to studyspace
+            create your account
           </p>
           <p className="flex self-start text-white text-md mx-2 relative">
             username
@@ -52,9 +52,9 @@ export default function LoginPage() {
             log in
           </button>
           <div className="ml-2 mt-3 flex flex-row self-center underline underline-offset-4">
-            <p className="text-white">Don't have an account?</p>
-            <Link to="/signup" className="text-[#F32FBC]">
-              Sign up here.
+            <p className="text-white">already have an account?</p>
+            <Link to="/login" className="text-[#F32FBC]">
+              log in here
             </Link>
           </div>
         </div>
