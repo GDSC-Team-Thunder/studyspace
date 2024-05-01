@@ -18,11 +18,11 @@ const Scene = () => {
     // If mounted properly, create a scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 
     // TODO: Find a way to not hardcode the size
     renderer.setSize(400, 400);
-    renderer.setClearColor(0x000000);
+    // renderer.setClearColor(0x000000);
     renderer.setPixelRatio(window.devicePixelRatio);
     refContainer.current.appendChild(renderer.domElement);
 
@@ -88,6 +88,7 @@ const Scene = () => {
       }
     );
 
+    // TODO: Reduce lag when resizing
     const handleResize = () => {
       const width = refContainer.current!.clientWidth;
       const height = refContainer.current!.clientHeight;
