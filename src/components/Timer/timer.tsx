@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import Reset from '../../assets/trash.svg';
 import Delete from '../../assets/delete-arrow.svg';
-import Settings from '../../assets/settings-bold.svg';
 import BlueLoop from '../../assets/infinity-blue.svg';
 import OrangeLoop from '../../assets/infinity-orange.svg';
 import Popup from 'reactjs-popup';
-import SettingsMenu from './timer-settings';
+import SettingsMenu from './settingsMenu';
 import 'reactjs-popup/dist/index.css';
 import '../../css/timer.css';
 
@@ -152,9 +151,7 @@ const Timer = () => {
                 <div className='text-center'>
                     <h1 className='timer-text'>{time}</h1>
                     <div className='flex justify-center'>
-                        <button className='bg-transparent p-0'>
-                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
-                        </button>
+                        <SettingsMenu sections={sections} setCount={setSections} />
                         <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
                         { loopQueue.length == 0 ? 
                             <button onClick={loopButton} className='bg-transparent p-0'>

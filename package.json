@@ -11,11 +11,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.19",
+    "@radix-ui/react-switch": "^1.0.3",
     "bootstrap": "^5.3.3",
     "particles.js": "^2.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
+    "react-input-number": "^5.0.19",
     "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
