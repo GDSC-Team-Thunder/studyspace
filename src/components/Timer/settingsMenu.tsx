@@ -13,6 +13,8 @@ interface Section {
 }
 
 interface SettingsMenuProps {
+  total: number;
+  setTotal: React.Dispatch<React.SetStateAction<number>>;
   sections: {
     pomodoro: Section;
     short: Section;
@@ -25,7 +27,7 @@ interface SettingsMenuProps {
   }>>;
 }
 
-const SettingsMenu: React.FC<SettingsMenuProps> = ({ sections, setSections }) => {
+const SettingsMenu: React.FC<SettingsMenuProps> = ({ total, setTotal, sections, setSections }) => {
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
     pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration },
@@ -35,7 +37,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ sections, setSections }) =>
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState(false);
 
   const handlePomodoroChange = (event: number) => {
     setSectionItems(prevState => ({
@@ -83,13 +85,38 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ sections, setSections }) =>
         duration: sectionItems.long.duration
       }
     }));
+    
+    const activeSection = findActiveSection();
+    
+    setTotal(sectionItems[activeSection].duration);
 
     handleClose();
   };
 
-  // const convertToSeconds = () => {
+  const findActiveSection = () => {
+    const activeSection = Object.keys(sections).find((key) => sections[key as keyof typeof sections].active === true);
+    return activeSection ? activeSection as keyof typeof sections : 'pomodoro';
+  }
 
-  // }
+  const convertToHoursAndMinutes = (seconds: number) => {
+    var duration = seconds;
+
+    const hours = Math.floor(duration / 3600);
+    duration %= 3600;
+    const minutes = Math.floor(duration / 60);
+
+    return {
+        hours,
+        minutes
+    };
+  };
+
+  const convertToSeconds = (hours: number, minutes: number) => {
+    const seconds = (hours * 3600) + (minutes * 60);
+    return seconds;
+  }
+
+
 
     return (
     <div>

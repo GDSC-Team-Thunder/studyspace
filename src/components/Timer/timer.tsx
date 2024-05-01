@@ -10,9 +10,9 @@ import '../../css/timer.css';
 
 const Timer = () => {
     const [sections, setSections] = useState({
-        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
-        short: { duration: 300, symbol: "🌙 ", active: false},
-        long: { duration: 900, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 5, symbol: "⭐ ", active: true},
+        short: { duration: 5, symbol: "🌙 ", active: false},
+        long: { duration: 5, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState(sections.pomodoro.duration);
     const [time, setTime] = useState();
@@ -21,15 +21,14 @@ const Timer = () => {
     const [isLooping, setIsLooping] = useState(false);
     const [loopCurrent, setLoopCurrent] = useState(0);
     const [loopQueue, setLoopQueue] = useState<string[]>([]);
-    const [svgColor, setSvgColor] = useState('#260093');
 
     useEffect(() => {
         updateTimer();
 
         if (total === 0) {
-            if (loopQueue.length != 0) {
-                loopQueueNext();
-            }
+            // if (loopQueue.length != 0) {
+            //     loopQueueNext();
+            // }
             queueNext();
         }
 
@@ -82,6 +81,7 @@ const Timer = () => {
         setTotal(0);
         setIsRunning(false);
     };
+
     const loopButton = () => { 
         setIsLooping(prevIsLooping => !prevIsLooping);
         // if 
@@ -103,29 +103,43 @@ const Timer = () => {
         };
     };
 
-    const getDurationBySymbol = (symbol: string) => {
-        const section = Object.values(sections).find((s) => s.symbol === symbol);
-        return section ? section.duration : 0;
+    const getSectionBySymbol = (symbol: string): keyof typeof sections => {
+        const sectionKey = Object.keys(sections).find((key) => sections[key as keyof typeof sections].symbol === symbol);
+        return sectionKey ? sectionKey as keyof typeof sections : 'pomodoro';
     };
 
     const queueNext = () => {
+        const oldSection = getSectionBySymbol(queue[0]);
+
         queue.shift();
         const newIcon = queue[0];
+        const newSection = getSectionBySymbol(newIcon);
 
-        const newTime = getDurationBySymbol(newIcon)
-        setTotal(newTime);
+        setSections(prevState => ({
+            ...prevState,
+            [oldSection]: {
+              ...prevState[oldSection],
+              active: false
+            },
+            [newSection]: {
+              ...prevState[newSection],
+              active: true
+            }
+          }));
 
+        setTotal(sections[newSection].duration);
     }
-    const loopQueueNext = () => {
-        if (loopCurrent == loopQueue.length) {
-            setLoopCurrent(0);
-        } else {
-            setLoopCurrent(loopCurrent + 1);
-        }
 
-        const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
-        setTotal(newTime);
-    }
+    // const loopQueueNext = () => {
+    //     if (loopCurrent == loopQueue.length) {
+    //         setLoopCurrent(0);
+    //     } else {
+    //         setLoopCurrent(loopCurrent + 1);
+    //     }
+
+    //     const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
+    //     setTotal(newTime);
+    // }
  
     const updateTimer = () => {
         let { hours, minutes, seconds } =
@@ -151,7 +165,7 @@ const Timer = () => {
                 <div className='text-center'>
                     <h1 className='timer-text'>{time}</h1>
                     <div className='flex justify-center'>
-                        <SettingsMenu sections={sections} setCount={setSections} />
+                        <SettingsMenu total={total} setTotal={setTotal} sections={sections} setSections={setSections}/>
                         <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
                         { loopQueue.length == 0 ? 
                             <button onClick={loopButton} className='bg-transparent p-0'>
@@ -164,9 +178,9 @@ const Timer = () => {
                     </div>
                     <br></br>
                     <div className='flex justify-center items-center space-x-2'>
-                        <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
-                        <button onClick={shortButton} className='section-button'>short break 🌙</button>
-                        <button onClick={longButton} className='section-button'>long break 🌕</button>
+                        <button onClick={pomodoroButton} className={`text-offWhite text-xl w-40 px-0 py-3 ${sections.pomodoro.active ? 'bg-darkPink hover:bg-orangey' : 'bg-darkBlue hover:bg-orangey'}`}>pomodoro ⭐</button>
+                        <button onClick={shortButton} className={`text-offWhite text-xl w-40 px-0 py-3 ${sections.short.active ? 'bg-darkPink hover:bg-orangey' : 'bg-darkBlue hover:bg-orangey'}`}>short break 🌙</button>
+                        <button onClick={longButton} className={`text-offWhite text-xl w-40 px-0 py-3 ${sections.long.active ? 'bg-darkPink hover:bg-orangey' : 'bg-darkBlue hover:bg-orangey'}`}>long break 🌕</button>
                     </div>
                 </div>
                 <div className='flex flex-col w-full text-left mt-20'>
