@@ -1,13 +1,18 @@
+import SideCol from "./SideCol";
+import Scene from "./ThreeScene/Scene";
 
-const Timer = () => {
+const Right = () => {
     return (
-        <div className='relative flex flex-col h-[85%] bg-[#FCFBF8] opacity-10 rounded-[25px] self-center w-[24%] p-1 justify-between'>
-            <div className='side-bg'>
+      <SideCol>
+        <div className="flex flex-col">
+          <div className="flex flex-col h-full">
+            <div className="flex-1">
+              <Scene />
             </div>
-            <div className='side-text'>
-            </div>
+          </div>
         </div>
+      </SideCol>
     );
   };
   
-export default Timer;
+export default Right;
