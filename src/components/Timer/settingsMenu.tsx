@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputNumber from 'react-input-number';
 import { Switch } from '@headlessui/react'
 import Modal from './modal.tsx';
@@ -13,7 +13,6 @@ interface Section {
 }
 
 interface SettingsMenuProps {
-  total: number;
   setTotal: React.Dispatch<React.SetStateAction<number>>;
   sections: {
     pomodoro: Section;
@@ -25,19 +24,25 @@ interface SettingsMenuProps {
     short: Section;
     long: Section;
   }>>;
+  hideSidebars: boolean;
+  setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SettingsMenu: React.FC<SettingsMenuProps> = ({ total, setTotal, sections, setSections }) => {
+const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
-    pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration },
-    short: { name: "short break length:", duration: sections.short.duration },
-    long: { name: "long break length:", duration: sections.short.duration }
+    pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration, hours: 0, minutes: 0 },
+    short: { name: "short break length:", duration: sections.short.duration, hours: 0, minutes: 0 },
+    long: { name: "long break length:", duration: sections.short.duration, hours: 0, minutes: 0 }
   })
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+
+    // setSectionItems(updatedSectionItems);
+  })
 
   const handlePomodoroChange = (event: number) => {
     setSectionItems(prevState => ({
@@ -47,6 +52,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ total, setTotal, sections, 
         duration: event
       }
     }));
+    console.log(setHideSidebars);
   };
 
   const handleShortChange = (event: number) => {
@@ -99,24 +105,15 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ total, setTotal, sections, 
   }
 
   const convertToHoursAndMinutes = (seconds: number) => {
-    var duration = seconds;
-
-    const hours = Math.floor(duration / 3600);
-    duration %= 3600;
-    const minutes = Math.floor(duration / 60);
-
-    return {
-        hours,
-        minutes
-    };
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return { hours, minutes };
   };
 
   const convertToSeconds = (hours: number, minutes: number) => {
     const seconds = (hours * 3600) + (minutes * 60);
     return seconds;
   }
-
-
 
     return (
     <div>
@@ -174,15 +171,15 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ total, setTotal, sections, 
           <div className="flex justify-center items-center my-2 mx-4">
             <p className="text-darkBlue font-semibold mr-3">hide sidebars:</p>
             <Switch
-              checked={enabled}
-              onChange={setEnabled}
+              checked={hideSidebars}
+              onChange={() => setHideSidebars(!hideSidebars)}
               className={`${
-                enabled ? 'bg-darkBlue' : 'bg-gray-200'
+                hideSidebars ? 'bg-darkBlue' : 'bg-gray-200'
               } relative inline-flex h-6 w-11 items-center rounded-full`}
             >
               <span
                 className={`${
-                  enabled ? 'translate-x-6' : 'translate-x-1'
+                  hideSidebars ? 'translate-x-6' : 'translate-x-1'
                 } inline-block h-4 w-4 transform rounded-full bg-white transition`}
               />
             </Switch>

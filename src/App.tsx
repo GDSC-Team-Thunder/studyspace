@@ -6,13 +6,18 @@ import { useState } from 'react';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState<boolean>(true);
+  const [hideSidebars, setHideSidebars] = useState<boolean>(false);
 
   return (
     <div className = "App">
       <div className="flex justify-between flex-row h-screen w-[95vw]">
+          { !hideSidebars && (
           <List/>
-          <Timer />
-          <List />
+          )}
+          <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars}/>
+          { !hideSidebars && (
+          <List/>
+          )}
       </div>
     </div>
   );
