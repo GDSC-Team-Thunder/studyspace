@@ -14,9 +14,9 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [sections, setSections] = useState({
-        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
-        short: { duration: 300, symbol: "🌙 ", active: false},
-        long: { duration: 300, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 4, symbol: "⭐ ", active: true},
+        short: { duration: 5, symbol: "🌙 ", active: false},
+        long: { duration: 3, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState(sections.pomodoro.duration);
     const [time, setTime] = useState();
@@ -25,7 +25,6 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [isLooping, setIsLooping] = useState(false);
     const [loopCurrent, setLoopCurrent] = useState(0);
     const [loopQueue, setLoopQueue] = useState<string[]>([]);
-    const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
 
     useEffect(() => {
         updateTimer();
@@ -33,8 +32,9 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         if (total === 0) {
             if (loopQueue.length != 0) {
                 loopQueueNext();
+            } else {
+                queueNext();
             }
-            queueNext();
         }
 
         if (isRunning) {
@@ -128,6 +128,32 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
 
         setTotal(sections[newSection].duration);
     }
+
+    const loopQueueNext = () => {
+        const oldSection = getSectionBySymbol(loopQueue[loopCurrent]);
+        if (loopCurrent === loopQueue.length - 1) {
+            setLoopCurrent(0);
+        } else {
+            setLoopCurrent(loopCurrent + 1);
+        }
+        const newSection = getSectionBySymbol(loopQueue[loopCurrent]);
+
+        setSections(prevState => ({
+            ...prevState,
+            [oldSection]: {
+              ...prevState[oldSection],
+              active: false
+            },
+            [newSection]: {
+              ...prevState[newSection],
+              active: true
+            }
+          }));
+          console.log(sections);
+
+        setTotal(sections[newSection].duration);
+
+    }
  
     const updateTimer = () => {
         let { hours, minutes, seconds } =
@@ -177,7 +203,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                 </div>
                 <div className='flex flex-col w-full max-w-[510px] text-left mt-20'>
                     <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
-                    { isLooping ? 
+                    { !isLooping ? 
                         <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
                             <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
                             <div className='flex items-center'>
