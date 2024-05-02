@@ -112,6 +112,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     }));
     
     const activeSection = findActiveSection();
+
     setTotal(sectionItems[activeSection].duration);
 
     handleClose();
@@ -125,7 +126,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     return (
     <div>
       <button onClick={handleShow} className='bg-transparent p-0'>
-          <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
+        <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
       </button>
 
       <Modal show={show} onClose={handleClose}>

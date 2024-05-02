@@ -22,17 +22,18 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [time, setTime] = useState();
     const [isRunning, setIsRunning] = useState(false);
     const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "]);
-    // const [isLooping, setIsLooping] = useState(false);
-    // const [loopCurrent, setLoopCurrent] = useState(0);
-    // const [loopQueue, setLoopQueue] = useState<string[]>([]);
+    const [isLooping, setIsLooping] = useState(false);
+    const [loopCurrent, setLoopCurrent] = useState(0);
+    const [loopQueue, setLoopQueue] = useState<string[]>([]);
+    const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
 
     useEffect(() => {
         updateTimer();
 
         if (total === 0) {
-            // if (loopQueue.length != 0) {
-            //     loopQueueNext();
-            // }
+            if (loopQueue.length != 0) {
+                loopQueueNext();
+            }
             queueNext();
         }
 
@@ -160,7 +161,12 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                         setHideSidebars={setHideSidebars}
                         />
                         <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
-                        <Loop queue={queue}></Loop>
+                        <Loop
+                        setLoopQueue={setLoopQueue}
+                        isLooping={isLooping}
+                        setIsLooping={setIsLooping}
+                        queue={queue}
+                        />
                     </div>
                     <br></br>
                     <div className='flex justify-center items-center space-x-2'>
@@ -171,17 +177,23 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                 </div>
                 <div className='flex flex-col w-full max-w-[510px] text-left mt-20'>
                     <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
-                    <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
-                        <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
-                        <div className='flex items-center'>
-                            <button className='bg-transparent p-0 m-0'>
-                                <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
-                            </button>
-                            <button className='bg-transparent p-0 m-0'>
-                                <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
-                            </button>
+                    { isLooping ? 
+                        <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
+                            <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
+                            <div className='flex items-center'>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
+                                </button>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
+                                </button>
+                            </div>
                         </div>
-                    </div>  
+                    : 
+                        <div className='bg-hotPink rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
+                            <p className='whitespace-nowrap overflow-hidden'>{loopQueue}</p>
+                        </div>
+                    };
                 </div>
             </div>
         </div>
