@@ -1,5 +1,6 @@
 import Timer from "../Timer/timer.tsx";
 import List from "../ToDoList/List.tsx";
+import Right from "../right.tsx";
 import "../../css/App.css";
 
 function Home() {
@@ -8,7 +9,7 @@ function Home() {
       <div className="flex justify-between flex-row h-screen w-[95vw]">
         <List />
         <Timer />
-        <List />
+        <Right />
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ const Scene = () => {
     camera.position.y = 1.5;
 
     const loader = new GLTFLoader();
-    loader.load('spaceship3.glb', (gltf) => {
+    loader.load('spaceship.glb', (gltf) => {
       const spaceship = gltf.scene;
       scene.add(spaceship);
       spaceship.scale.set(0.8, 0.8, 0.8);
