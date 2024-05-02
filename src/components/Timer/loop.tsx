@@ -7,7 +7,7 @@ interface LoopProps {
     queue: string[];
   }
   
-  const Loop: React.FC<LoopProps> = ({ queue }) => {
+const Loop: React.FC<LoopProps> = ({ queue }) => {
     const [isLooping, setIsLooping] = useState(false);
     // const [loopCurrent, setLoopCurrent] = useState(0);
     const [loopQueue, setLoopQueue] = useState<string[]>([]);
@@ -18,6 +18,17 @@ interface LoopProps {
             setLoopQueue(queue);
         }
     }
+
+    // const loopQueueNext = () => {
+    //     if (loopCurrent == loopQueue.length) {
+    //         setLoopCurrent(0);
+    //     } else {
+    //         setLoopCurrent(loopCurrent + 1);
+    //     }
+
+    //     const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
+    //     setTotal(newTime);
+    // }
 
     return (
         <div>

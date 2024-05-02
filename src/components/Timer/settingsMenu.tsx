@@ -28,39 +28,58 @@ interface SettingsMenuProps {
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
 const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
-    pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration, hours: 0, minutes: 0 },
-    short: { name: "short break length:", duration: sections.short.duration, hours: 0, minutes: 0 },
-    long: { name: "long break length:", duration: sections.short.duration, hours: 0, minutes: 0 }
+    pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration, hours: Math.floor(sections.pomodoro.duration / 3600), minutes: Math.floor((sections.pomodoro.duration % 3600) / 60) },
+    short: { name: "short break length:", duration: sections.short.duration, hours: Math.floor(sections.short.duration / 3600), minutes: Math.floor((sections.short.duration % 3600) / 60) },
+    long: { name: "long break length:", duration: sections.short.duration, hours: Math.floor(sections.long.duration / 3600), minutes: Math.floor((sections.long.duration % 3600) / 60) }
   })
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [enabled, setEnabled] = useState(false);
 
-  useEffect(() => {
+  const convertToSeconds = (hours: number, minutes: number) => {
+    const seconds = hours * 3600 + minutes * 60;
+    return seconds;
+  };
 
-    // setSectionItems(updatedSectionItems);
-  })
+  const handlePomodoroHrChange = (event: number) => {
+    const duration = convertToSeconds(event, sectionItems.pomodoro.minutes);
+    updatePomodoro(duration);
+  };
 
-  const handlePomodoroChange = (event: number) => {
+  const handlePomodoroMinChange = (event: number) => { 
+    const duration = convertToSeconds(sectionItems.pomodoro.hours, event);
+    updatePomodoro(duration);
+  };
+
+  const updatePomodoro = (duration: number) => {
     setSectionItems(prevState => ({
       ...prevState,
       pomodoro: {
         ...prevState.pomodoro,
-        duration: event
+        duration: duration
       }
     }));
-    console.log(setHideSidebars);
   };
 
-  const handleShortChange = (event: number) => {
+  const handleShortHrChange = (event: number) => {
+    const duration = convertToSeconds(event, sectionItems.short.minutes);
+    updateShort(duration);
+  };
+
+  const handleShortMinChange = (event: number) => { 
+    const duration = convertToSeconds(sectionItems.short.hours, event);
+    updatePomodoro(duration);
+  };
+
+  const updateShort = (duration: number) => {
     setSectionItems(prevState => ({
       ...prevState,
       short: {
         ...prevState.short,
-        duration: event
+        duration: duration
       }
     }));
   };
@@ -93,7 +112,6 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     }));
     
     const activeSection = findActiveSection();
-    
     setTotal(sectionItems[activeSection].duration);
 
     handleClose();
@@ -102,17 +120,6 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
   const findActiveSection = () => {
     const activeSection = Object.keys(sections).find((key) => sections[key as keyof typeof sections].active === true);
     return activeSection ? activeSection as keyof typeof sections : 'pomodoro';
-  }
-
-  const convertToHoursAndMinutes = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    return { hours, minutes };
-  };
-
-  const convertToSeconds = (hours: number, minutes: number) => {
-    const seconds = (hours * 3600) + (minutes * 60);
-    return seconds;
   }
 
     return (
@@ -134,37 +141,61 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
             <div className="flex flex-row my-8 items-center">
               <p className="text-darkBlue font-semibold mr-4">{sectionItems.pomodoro.name}</p>
               <InputNumber 
-              className="bg-offWhite border-2 rounded-lg max-w-16 h-8 text-darkBlue font-semibold text-center" 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
               min={0} 
               max={99} 
-              value={sectionItems.pomodoro.duration} 
-              onChange={handlePomodoroChange}
+              value={sectionItems.pomodoro.hours} 
+              onChange={handlePomodoroHrChange}
               />
-              <p className="text-darkBlue font-semibold ml-3">seconds</p>
+              <p className="text-darkBlue font-semibold mx-2">hr</p>
+              <InputNumber 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
+              min={0} 
+              max={99} 
+              value={sectionItems.pomodoro.minutes} 
+              onChange={handlePomodoroMinChange}
+              />
+              <p className="text-darkBlue font-semibold ml-2">min</p>
             </div>
 
             <div className="flex flex-row my-8 items-center">
               <p className="text-darkBlue font-semibold mr-4">{sectionItems.short.name}</p>
               <InputNumber 
-              className="bg-offWhite border-2 rounded-lg max-w-16 h-8 text-darkBlue font-semibold text-center" 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
               min={0} 
               max={99} 
-              value={sectionItems.short.duration} 
-              onChange={handleShortChange}
+              value={sectionItems.short.hours} 
+              onChange={handleShortHrChange}
               />
-              <p className="text-darkBlue font-semibold ml-3">seconds</p>
+              <p className="text-darkBlue font-semibold mx-2">hr</p>
+              <InputNumber 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
+              min={0} 
+              max={99} 
+              value={sectionItems.short.minutes} 
+              onChange={handleShortMinChange}
+              />
+              <p className="text-darkBlue font-semibold ml-2">min</p>
             </div>
 
             <div className="flex flex-row my-8 items-center">
               <p className="text-darkBlue font-semibold mr-4">{sectionItems.long.name}</p>
               <InputNumber 
-              className="bg-offWhite border-2 rounded-lg max-w-16 h-8 text-darkBlue font-semibold text-center" 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
               min={0} 
               max={99} 
-              value={sectionItems.long.duration} 
+              value={sectionItems.long.hours} 
               onChange={handleLongChange}
               />
-              <p className="text-darkBlue font-semibold ml-3">seconds</p>
+              <p className="text-darkBlue font-semibold mx-2">hr</p>
+              <InputNumber 
+              className="bg-offWhite border-2 rounded-lg max-w-12 h-8 text-darkBlue font-semibold text-center" 
+              min={0} 
+              max={99} 
+              value={sectionItems.long.minutes} 
+              onChange={handleLongChange}
+              />
+              <p className="text-darkBlue font-semibold ml-2">min</p>
             </div>
           </div>   
 
@@ -195,3 +226,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
   };
   
   export default SettingsMenu;
+
+  // change default time options every time menu is opened?
+  // hours doesn't work...
+  // padding around x button that idk where it came from

@@ -28,7 +28,6 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
 
     useEffect(() => {
         updateTimer();
-        console.log(hideSidebars);
 
         if (total === 0) {
             // if (loopQueue.length != 0) {
@@ -128,17 +127,6 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
 
         setTotal(sections[newSection].duration);
     }
-
-    // const loopQueueNext = () => {
-    //     if (loopCurrent == loopQueue.length) {
-    //         setLoopCurrent(0);
-    //     } else {
-    //         setLoopCurrent(loopCurrent + 1);
-    //     }
-
-    //     const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
-    //     setTotal(newTime);
-    // }
  
     const updateTimer = () => {
         let { hours, minutes, seconds } =
@@ -204,3 +192,4 @@ export default Timer;
 
 // pause timer when menu is open
 // some bug where 2 things were active at the same time but idk how to replicate it...
+// when deleting everything from queue, current active section should be inactive
