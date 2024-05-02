@@ -7,10 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkBlue: '#260093',
-        hotPink: '#E55ABE',
-        orange: '#FF9C06',
-        bgWhite: '#FCFBF8',
+        darkBlue: '#1D006F',
+        hotPink: '#F32FBC',
+        orange: '#FFC806',
+        offWhite: '#FDFDFD',
+        bgColor: '#FCFBF8',
       },
     },
   },

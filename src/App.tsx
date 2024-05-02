@@ -1,27 +1,19 @@
-import React from "react";
-import Timer from './components/timer.tsx'
-import Right from './components/right.tsx'
-import List from './components/ToDoList/List.tsx';
-import Header from './components/header.tsx';
-import LoginPage from './components/loginPage/LoginPage.tsx';
-import './css/App.css';
-import { useState } from 'react';
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import Home from "./components/MainPage/Home.tsx";
+import LoginPage from "./components/loginPage/LoginPage.tsx";
+import NewUserPage from "./components/loginPage/newUserPage.tsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./css/App.css";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(true);
-
   return (
-    <div className = "App">
-      <Header />
-      <div className="flex justify-center flex-row h-screen w-[97%]">
-          <List/>
-          <Timer />
-          <Right />
-      </div>
-      {/* <LoginPage/> */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/Signup" element={<NewUserPage />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default App
+export default App;
