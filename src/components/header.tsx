@@ -4,7 +4,7 @@ function Header() {
   return (
     <div className="fixed justify-between items-center max-w-screen-xl mx-auto">
       <Link
-        to="/home"
+        to="/"
         className="fixed top-3 left-8 text-3xl font-bold flex-shrink-0"
       >
         Studyspace
