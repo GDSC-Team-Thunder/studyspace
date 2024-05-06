@@ -50,7 +50,7 @@ export default function List() {
                 </ul>
             </div>
             <label className="flex flex-row items-center justify-between">
-                <input className="flex-grow pl-3 mr-1 bg-slate-200 rounded-full bg-[#1D006F] placeholder-white h-full" 
+                <input className="flex-grow pl-3 mr-1 bg-slate-200 rounded-full bg-[#1D006F] placeholder:text-gray-500 text-black h-full" 
                     placeholder="add items here..." value={addText} 
                     onChange={e => setAddText(e.target.value)}
                     onKeyDown={handleKeyEvent}/>
