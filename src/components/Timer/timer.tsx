@@ -14,9 +14,9 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [sections, setSections] = useState({
-        pomodoro: { duration: 4, symbol: "⭐ ", active: true},
-        short: { duration: 5, symbol: "🌙 ", active: false},
-        long: { duration: 3, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
+        short: { duration: 300, symbol: "🌙 ", active: false},
+        long: { duration: 900, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState(sections.pomodoro.duration);
     const [time, setTime] = useState();
@@ -146,7 +146,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
             },
             [newSection]: {
               ...prevState[newSection],
-              active: true
+              active: false
             }
           }));
           console.log(sections);
