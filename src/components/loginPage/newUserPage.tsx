@@ -1,12 +1,39 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function NewUserPage() {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const registerUser = async () => {
+    try {
+      const userData = {
+        email,
+        username,
+        password,
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/auth/register",
+        userData
+      );
+
+      console.log(response.data);
+      if (response.status === 200) {
+        navigate("/");
+      }
+      return response.data.status;
+    } catch (error: any) {
+      console.error(error.response.data);
+    }
+  };
+
+  const handleRegister = (e: any) => {
+    // e.preventDefault();
+    registerUser();
     setUsername("");
     setEmail("");
     setPassword("");
@@ -46,7 +73,7 @@ export default function NewUserPage() {
           />
           <button
             className="flex mx-2 my-4 px-3 py-1 items-center rounded-[10px] justify-center bg-[#F32FBC]"
-            onClick={handleLogin}
+            onClick={handleRegister}
             disabled={username.length == 0 || password.length == 0}
           >
             log in

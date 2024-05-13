@@ -1,18 +1,41 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginPage() {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    try {
+      const userData = {
+        email,
+        password,
+      };
+
+      const response = await axios.post(
+        "http://localhost:8000/auth/login",
+        userData
+      );
+
+      console.log(response.data);
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (error: any) {
+      console.error(error.response.data);
+    }
+  };
+
+  const handleSubmit = () => {
+    handleLogin();
     setUsername("");
     setEmail("");
     setPassword("");
   };
 
-  //Top option is new user option, bottom option is login option
   return (
     <div className="flex justify-center items-center flex-row h-screen w-[97%]">
       <div className="flex flex-col justify-center items-center bg-slate-50/10 h-4/6 w-1/2 rounded-3xl">
@@ -46,7 +69,7 @@ export default function LoginPage() {
           />
           <button
             className="flex mx-2 my-4 px-3 py-1 items-center rounded-[10px] justify-center bg-[#F32FBC]"
-            onClick={handleLogin}
+            onClick={handleSubmit}
             disabled={username.length == 0 || password.length == 0}
           >
             log in

@@ -70,8 +70,6 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-let token;
-
 app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -98,9 +96,13 @@ app.post("/auth/login", async (req, res) => {
 
     const jwt = require("jsonwebtoken");
     const JWT_SECRET_KEY = process.env.JWT_SECRET || console.log("ERROR");
-    token = jwt.sign({ _id: user._id, email: user.email }, JWT_SECRET_KEY, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign(
+      { _id: user._id, email: user.email },
+      JWT_SECRET_KEY,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
 
     res.status(200).json({
       status: 200,
@@ -115,9 +117,6 @@ app.post("/auth/login", async (req, res) => {
     });
   }
 });
-console.log("Heyooooooooooooooooooooooooooooo");
-console.log(token);
-export { token };
 
 app.get("/:id", async (req, res) => {
   try {
