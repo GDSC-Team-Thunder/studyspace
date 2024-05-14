@@ -2,7 +2,6 @@ import { useState } from "react";
 import Task from "./Task";
 import IncompleteTask from "./IncompleteTask";
 import CompleteTask from "./CompleteTask";
-import SideCol from "../SideCol";
 
 export default function List() {
   const [todo, editTodo] = useState<Task[]>([]);
@@ -50,7 +49,9 @@ export default function List() {
             rounded-[25px] self-center w-[22.5%] py-5 px-4 justify-between"
     >
       <div className="flex flex-col">
-        <span className="my-3 self-start font-bold text-2xl">to-do list</span>
+        <span className="my-3 ml-1 self-start font-bold text-2xl">
+          to-do list
+        </span>
         <ul className="flex flex-col w-full">
           {todo.map((element) => (
             <IncompleteTask
@@ -70,15 +71,15 @@ export default function List() {
       </div>
       <label className="flex flex-row items-center justify-between">
         <input
-          className="flex-grow pl-3 mr-1 bg-slate-200 rounded-[25px] text-black placeholder-gray-500 h-full"
+          className="flex-grow h-10 pl-3 mr-2.5 rounded-full bg-[#1D006F] placeholder:text-white text-white h-full"
           placeholder="add items here..."
           value={addText}
           onChange={(e) => setAddText(e.target.value)}
           onKeyDown={handleKeyEvent}
         />
         <button
-          className={`rounded-full text-2xl font-bold items-center 
-                    py-2 px-4 h-full cursor-pointer ${
+          className={`rounded-full h-10 text-2xl text-black font-bold
+                    px-3 h-full cursor-pointer ${
                       addText.length == 0 && "bg-gray-400"
                     }`}
           disabled={addText.length == 0}
