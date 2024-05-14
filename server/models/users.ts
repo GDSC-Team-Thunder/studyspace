@@ -35,10 +35,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  friendCode: {
-    type: String,
-    default: "",
-  },
   friends: {
     type: Array<String>,
     default: {},

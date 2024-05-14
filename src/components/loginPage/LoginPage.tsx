@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginPage() {
   const [username, setUsername] = useState<string>("");
@@ -25,6 +27,16 @@ export default function LoginPage() {
         navigate("/");
       }
     } catch (error: any) {
+      if (error.response.data.status === 404) {
+        toast.error("User Not Found!", {
+          position: "bottom-right",
+        });
+      }
+      if (error.response.data.status === 400) {
+        toast.error("Incorrect Password!", {
+          position: "bottom-right",
+        });
+      }
       console.error(error.response.data);
     }
   };
@@ -80,6 +92,7 @@ export default function LoginPage() {
               Sign up here.
             </Link>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </div>

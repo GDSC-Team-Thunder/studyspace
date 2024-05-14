@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function NewUserPage() {
   const [username, setUsername] = useState<string>("");
@@ -27,6 +29,12 @@ export default function NewUserPage() {
       }
       return response.data.status;
     } catch (error: any) {
+      if (error.response.data.status === 400) {
+        toast.error("Email already in use!", {
+          position: "bottom-right",
+          className: "bg-darkblue",
+        });
+      }
       console.error(error.response.data);
     }
   };
