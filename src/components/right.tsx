@@ -1,13 +1,20 @@
+import SideCol from "./SideCol";
+import Scene from "./ThreeScene/Scene";
+import Leaderboard from "./Leaderboard/Leaderboard.tsx"
 
-const Timer = () => {
+const Right = () => {
     return (
-        <div className='relative flex flex-col h-[85%] bg-[#FCFBF8] opacity-10 rounded-[25px] self-center w-[24%] p-1 justify-between'>
-            <div className='side-bg'>
+      <div className="relative flex flex-col h-[85%] self-center w-[22.5%] justify-between">
+        {/* <div className="flex flex-col">
+          <div className="flex flex-col h-full">
+            <div className="flex-1">
+              <Scene />
             </div>
-            <div className='side-text'>
-            </div>
-        </div>
+          </div>
+        </div> */}
+        <Leaderboard />
+      </div>
     );
   };
   
-export default Timer;
+export default Right;

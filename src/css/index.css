@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
 
 :root {
   font-family: "Red Hat Display", sans-serif;
   line-height: 1.5;
 
   color-scheme: light dark;
-  color: #FDFDFD;
+  color: #fdfdfd;
 
   background-image: url("../assets/bg-dark.svg");
   background-size: cover;
@@ -18,7 +18,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-weight: 600;
 }
 
@@ -33,16 +34,16 @@ body {
 }
 
 button {
-  background-color: #F32FBC;
+  background-color: #f32fbc;
   border: none;
   outline: none;
-  color: #FFF9F9;
+  color: #fff9f9;
 
   border-radius: 35px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  
+
   font-size: 25px;
   font-weight: 700;
 }
