@@ -16,7 +16,7 @@ const Timer = () => {
         long: { duration: 900, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState(sections.pomodoro.duration);
-    const [time, setTime] = useState();
+    const [time, setTime] = useState<String>();
     const [isRunning, setIsRunning] = useState(false);
     const [queue, setQueue] = useState(["⭐ ", "🌙 ", "⭐ ", "🌙 ", "⭐ ", "🌕 "]);
     const [isLooping, setIsLooping] = useState(false);
@@ -147,46 +147,49 @@ const Timer = () => {
     };
 
     return (
-        <div className='relative flex flex-col bg-bgColor/10 h-[85%] w-[52%] rounded-[25px] self-center justify-center'>
-            <div className='relative flex flex-col w-[75%] items-center self-center mt-20'>
-                <div className='text-center'>
-                    <h1 className='timer-text'>{time}</h1>
-                    <div className='flex justify-center'>
-                        <button className='bg-transparent p-0'>
-                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
-                        </button>
-                        <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
-                        { loopQueue.length == 0 ? 
-                            <button onClick={loopButton} className='bg-transparent p-0'>
-                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={BlueLoop} alt="settings"></img>
+        <div className='relative flex flex-col h-[85%] w-[52%] self-center justify-center'>
+            <div className='relative flex flex-grow bg-bgColor/10 h-full w-full rounded-[25px] self-center justify-center'>
+                <div className='relative flex flex-col w-[75%] items-center self-center justify-between'>
+                    <div className='text-center h-full items-center justify-center'>
+                        <h1 className='timer-text'>{time}</h1>
+                        <div className='flex justify-center'>
+                            <button className='bg-transparent p-0'>
+                                    <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
                             </button>
-                            : <button onClick={loopButton} className='bg-transparent p-0'>
-                                <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={OrangeLoop} alt="settings"></img>
-                            </button>
-                        }
-                    </div>
-                    <br></br>
-                    <div className='flex justify-center items-center space-x-2'>
-                        <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
-                        <button onClick={shortButton} className='section-button'>short break 🌙</button>
-                        <button onClick={longButton} className='section-button'>long break 🌕</button>
-                    </div>
-                </div>
-                <div className='flex flex-col w-full text-left mt-20'>
-                    <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
-                    <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
-                        <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
-                        <div className='flex items-center'>
-                            <button className='bg-transparent p-0 m-0'>
-                                <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
-                            </button>
-                            <button className='bg-transparent p-0 m-0'>
-                                <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
-                            </button>
+                            <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
+                            { loopQueue.length == 0 ? 
+                                <button onClick={loopButton} className='bg-transparent p-0'>
+                                    <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={BlueLoop} alt="settings"></img>
+                                </button>
+                                : <button onClick={loopButton} className='bg-transparent p-0'>
+                                    <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={OrangeLoop} alt="settings"></img>
+                                </button>
+                            }
                         </div>
-                    </div>  
+                        <br></br>
+                        <div className='flex justify-center items-center space-x-2'>
+                            <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
+                            <button onClick={shortButton} className='section-button'>short break 🌙</button>
+                            <button onClick={longButton} className='section-button'>long break 🌕</button>
+                        </div>
+                    </div>
+                    <div className='flex flex-col w-full text-left mt-20'>
+                        <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
+                        <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
+                            <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
+                            <div className='flex items-center'>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
+                                </button>
+                                <button className='bg-transparent p-0 m-0'>
+                                    <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <iframe className="flex rounded-[12px] w-full bg-transparent mt-2 h-[80px]" src="https://open.spotify.com/embed/playlist/3GJU6WCxTv5jeIhIttI8ae?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"/>
         </div>
     );
   };
