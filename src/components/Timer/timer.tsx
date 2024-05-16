@@ -4,6 +4,7 @@ import Delete from "../../assets/delete-arrow.svg";
 import Settings from "../../assets/settings-bold.svg";
 import BlueLoop from "../../assets/infinity-blue.svg";
 import OrangeLoop from "../../assets/infinity-orange.svg";
+import ProgressBar from "../ProgressBar";
 import Popup from "reactjs-popup";
 import SettingsMenu from "./timer-settings";
 import "reactjs-popup/dist/index.css";
@@ -155,7 +156,7 @@ const Timer = () => {
   };
 
   return (
-    <div className="relative flex flex-col bg-bgColor/10 h-[85%] w-[52%] rounded-[25px] self-center justify-center">
+    <div className="relative align-top flex flex-col bg-bgColor/10 h-[85%] w-[52%] rounded-[25px] self-center justify-center">
       <div className="relative flex flex-col w-[75%] items-center self-center mt-20">
         <div className="text-center">
           <h1 className="timer-text">{time}</h1>
@@ -187,6 +188,9 @@ const Timer = () => {
                 ></img>
               </button>
             )}
+          </div>
+          <div className="mt-5">
+          <ProgressBar />
           </div>
           <br></br>
           <div className="flex justify-center items-center space-x-2">

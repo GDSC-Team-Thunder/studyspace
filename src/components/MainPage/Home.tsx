@@ -7,8 +7,8 @@ import "../../css/App.css";
 function Home() {
   return (
     <div className="App">
-      <Header />
-      <div className="flex justify-between flex-row h-screen w-[95vw]">
+      <Header/>
+      <div className="flex justify-between align-top flex-row w-[95vw] mt-0">
         <List />
         <Timer />
         <Right />

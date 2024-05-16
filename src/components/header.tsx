@@ -1,23 +1,41 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Header() {
-  return (
-    <div className="fixed justify-between items-center max-w-screen-xl mx-auto">
-      <Link
-        to="/"
-        className="fixed top-3 left-8 text-3xl font-bold flex-shrink-0"
-      >
-        Studyspace
-      </Link>
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState("");
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setUsername("");
+    };
 
-      <div className="flex justify-between space-x-5">
-        <Link to="/signup" className="fixed top-4 right-20 text-white">
-          Signup
-        </Link>
-        <Link to="/login" className="fixed top-4 right-6 text-white">
-          Log in
-        </Link>
-      </div>
+  return (
+    <div className="flex justify-between items-center text-offWhite py-5 px-14 w-full">
+      <Link to="/" className="text-3xl font-bold flex-shrink-0">
+        studyspace
+      </Link>
+      <div className="flex justify-between space-x-10">
+  {isLoggedIn ? (
+    <>
+      <Link to="/" className="font-bold">
+        StudySpace
+      </Link>
+      <span className="font-bold">{username}</span>
+      <button onClick={handleLogout} className="font-bold">
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <Link to="/signup" className="font-bold">
+        Sign Up
+      </Link>
+      <Link to="/login" className="font-bold">
+        Log In
+      </Link>
+    </>
+  )}
+    </div>
     </div>
   );
 }
