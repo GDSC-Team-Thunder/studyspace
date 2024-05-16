@@ -22,7 +22,7 @@ const Scene = () => {
 
     // TODO: Find a way to not hardcode the size
     renderer.setSize(400, 400);
-    renderer.setClearColor(0x000000);
+    // renderer.setClearColor(0x000000);
     renderer.setPixelRatio(window.devicePixelRatio);
     refContainer.current.appendChild(renderer.domElement);
 
@@ -46,15 +46,16 @@ const Scene = () => {
       stars.push(star);
     }
 
-    camera.position.z = 3;
+    camera.position.x = 0;
     camera.position.y = 1.5;
+    camera.position.z = 3;
 
     const loader = new GLTFLoader();
     loader.load('spaceship.glb', (gltf) => {
       const spaceship = gltf.scene;
       scene.add(spaceship);
       spaceship.scale.set(0.8, 0.8, 0.8);
-      spaceship.position.set(0, -4, -20); // Start slightly ahead in the z-axis
+      spaceship.position.set(-2, 0, -20); // Start slightly ahead in the z-axis
       spaceship.rotation.y = Math.PI;
       spaceship.rotation.x = 0.3;
 
@@ -88,6 +89,7 @@ const Scene = () => {
       }
     );
 
+    // TODO: Reduce lag when resizing
     const handleResize = () => {
       const width = refContainer.current!.clientWidth;
       const height = refContainer.current!.clientHeight;
@@ -104,7 +106,7 @@ const Scene = () => {
     };
   }, []);
 
-  return <div ref={refContainer} />;
+  return <div ref={refContainer} className='rounded-3xl overflow-hidden' />;
 }
 
 export default Scene;
