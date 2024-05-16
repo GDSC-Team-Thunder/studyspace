@@ -18,7 +18,7 @@ const Scene = () => {
     // If mounted properly, create a scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
     // TODO: Find a way to not hardcode the size
     renderer.setSize(400, 400);
@@ -46,15 +46,16 @@ const Scene = () => {
       stars.push(star);
     }
 
-    camera.position.z = 3;
+    camera.position.x = 0;
     camera.position.y = 1.5;
+    camera.position.z = 3;
 
     const loader = new GLTFLoader();
     loader.load('spaceship.glb', (gltf) => {
       const spaceship = gltf.scene;
       scene.add(spaceship);
       spaceship.scale.set(0.8, 0.8, 0.8);
-      spaceship.position.set(0, -4, -20); // Start slightly ahead in the z-axis
+      spaceship.position.set(-1, -4, -20); // Start slightly ahead in the z-axis
       spaceship.rotation.y = Math.PI;
       spaceship.rotation.x = 0.3;
 
@@ -105,7 +106,7 @@ const Scene = () => {
     };
   }, []);
 
-  return <div ref={refContainer} />;
+  return <div ref={refContainer} className='rounded-3xl overflow-hidden' />;
 }
 
 export default Scene;
