@@ -21,14 +21,14 @@ export default function Leaderboard() {
     return (
         <div className="bg-bgColor/10 rounded-[25px] self-center w-full h-[50%] p-6 flex flex-col">
             <h1 className="font-black text-2xl text-left mb-2 sticky top-0">leaderboard 👑</h1>
-            <div className="flex-grow overflow-auto">
+            <div className="flex-grow overflow-auto scrollbar-hide">
                 <ul>
                     {rankings.map((ranking) => (        
-                        <li className="flex flex-row bg-darkBlue h-16 items-center text-left p-2 px-3 my-2 rounded-[15px]">
-                            <div className="flex bg-hotPink min-h-11 min-w-11 mr-3 rounded-[25px] justify-center items-center">
-                                <h1 className="font-black text-lg">{ranking.rank}</h1>
+                        <li className="flex flex-row bg-darkBlue h-14 items-center text-left p-2 px-3 my-3 rounded-[15px]">
+                            <div className="flex bg-hotPink min-h-10 min-w-10 mr-3 rounded-[25px] justify-center items-center">
+                                <h1 className="font-black text-base">{ranking.rank}</h1>
                             </div>
-                            <div className="flex flex-col overflow-x-auto">
+                            <div className="flex flex-col overflow-x-auto scrollbar-hide">
                                 <h2 className="font-black text-lg">{ranking.name}</h2>
                                 <p className="font-bold text-xs">{ranking.miles}</p>
                             </div>

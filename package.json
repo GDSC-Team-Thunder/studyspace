@@ -13,15 +13,16 @@
   "dependencies": {
     "@headlessui/react": "^1.7.19",
     "@radix-ui/react-switch": "^1.0.3",
+    "@types/three": "^0.162.0",
     "bootstrap": "^5.3.3",
     "particles.js": "^2.0.0",
-    "@types/three": "^0.162.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
     "react-input-number": "^5.0.19",
     "react-router-dom": "^6.23.0",
     "reactjs-popup": "^2.0.6",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "three": "^0.162.0"
   },
   "devDependencies": {
