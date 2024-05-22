@@ -25,9 +25,9 @@ interface SectionsState {
 
 const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [sections, setSections] = useState<SectionsState>({
-        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
-        short: { duration: 300, symbol: "🌙 ", active: false},
-        long: { duration: 900, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 5, symbol: "⭐ ", active: true},
+        short: { duration: 3, symbol: "🌙 ", active: false},
+        long: { duration: 4, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState<number>(sections.pomodoro.duration);
     const [time, setTime] = useState<string>('');
@@ -106,6 +106,32 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         });
     };
 
+    const setActiveState = (section: string) => {
+        setSections((prevState) => {
+            const updatedSections = { ...prevState };
+    
+            updatedSections[section] = {
+                ...updatedSections[section],
+                active: true,
+            };
+    
+            return updatedSections;
+        });
+    };
+
+    const deactivateState = (section: string) => {
+        setSections((prevState) => {
+            const updatedSections = { ...prevState };
+    
+            updatedSections[section] = {
+                ...updatedSections[section],
+                active: false,
+            };
+    
+            return updatedSections;
+        });
+    };
+
     const clearQueue = () => {
         setIsRunning(false);
         setQueue([]);
@@ -114,9 +140,9 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         updateTimer();
     };
 
-    const getSectionBySymbol = (symbol: string): keyof typeof sections => {
+    const getSectionBySymbol = (symbol: string): keyof typeof sections | null => {
         const sectionKey = Object.keys(sections).find((key) => sections[key as keyof typeof sections].symbol === symbol);
-        return sectionKey ? sectionKey as keyof typeof sections : 'pomodoro';
+        return sectionKey ? sectionKey as keyof typeof sections : null;
     };
 
     const queueNext = () => {
@@ -124,6 +150,12 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         queue.shift();
         const newIcon = queue[0];
         const newSection = getSectionBySymbol(newIcon);
+
+        if (newSection == null) {
+            setIsRunning(false);
+            resetActiveState();
+            return;
+        }
     
         setSections((prevState) => {
             const updatedSections = { ...prevState };
