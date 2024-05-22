@@ -25,9 +25,9 @@ interface SectionsState {
 
 const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [sections, setSections] = useState<SectionsState>({
-        pomodoro: { duration: 5, symbol: "⭐ ", active: true},
-        short: { duration: 3, symbol: "🌙 ", active: false},
-        long: { duration: 4, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
+        short: { duration: 300, symbol: "🌙 ", active: false},
+        long: { duration: 900, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState<number>(sections.pomodoro.duration);
     const [time, setTime] = useState<string>('');
@@ -59,6 +59,10 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     }, [isRunning, total]);
 
     const timerButton = () => {
+        if (isRunning == false) {
+            const currentSection = getSectionBySymbol(queue[0]);
+            setActiveState(currentSection);
+        };
         setIsRunning(prevIsRunning => !prevIsRunning);
     };
     const pomodoroButton = () => {
@@ -106,7 +110,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         });
     };
 
-    const setActiveState = (section: string) => {
+    const setActiveState = (section: string | null) => {
         setSections((prevState) => {
             const updatedSections = { ...prevState };
     
@@ -119,7 +123,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         });
     };
 
-    const deactivateState = (section: string) => {
+    const deactivateState = (section: string | null) => {
         setSections((prevState) => {
             const updatedSections = { ...prevState };
     
@@ -156,24 +160,9 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
             resetActiveState();
             return;
         }
-    
-        setSections((prevState) => {
-            const updatedSections = { ...prevState };
-    
-            if (oldSection && updatedSections[oldSection]) {
-                updatedSections[oldSection] = {
-                    ...updatedSections[oldSection],
-                    active: false,
-                };
-            }
-            updatedSections[newSection] = {
-                ...updatedSections[newSection],
-                active: true,
-            };
-    
-            return updatedSections;
-        });
-    
+
+        deactivateState(oldSection);
+        setActiveState(newSection);
         setTotal(sections[newSection].duration);
     };
 
@@ -187,19 +176,8 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
         const newSectionIndex = loopCurrent === loopQueue.length - 1 ? 0 : loopCurrent + 1;
         const newSection = getSectionBySymbol(loopQueue[newSectionIndex]);
 
-        setSections(prevState => ({
-            ...prevState,
-            [oldSection]: {
-              ...prevState[oldSection],
-              active: false
-            },
-            [newSection]: {
-              ...prevState[newSection],
-              active: true
-            }
-          }));
-          console.log(sections);
-
+        deactivateState(oldSection);
+        setActiveState(newSection);
         setTotal(sections[newSection].duration);
 
     }
