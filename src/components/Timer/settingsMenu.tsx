@@ -30,14 +30,38 @@ interface SettingsMenuProps {
 
 
 const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
+  console.log({sections});
+
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
-    pomodoro: { name: "pomodoro length:", duration: sections.pomodoro.duration, hours: Math.floor(sections.pomodoro.duration / 3600), minutes: Math.floor((sections.pomodoro.duration % 3600) / 60) },
-    short: { name: "short break length:", duration: sections.short.duration, hours: Math.floor(sections.short.duration / 3600), minutes: Math.floor((sections.short.duration % 3600) / 60) },
-    long: { name: "long break length:", duration: sections.short.duration, hours: Math.floor(sections.long.duration / 3600), minutes: Math.floor((sections.long.duration % 3600) / 60) }
+    pomodoro: { name: "pomodoro length:", duration: 0, hours: 0, minutes: 0 },
+    short: { name: "short break length:", duration: 0, hours: 0, minutes: 0 },
+    long: { name: "long break length:", duration: 0, hours: 0, minutes: 0 }
   })
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    setSectionItems({
+      pomodoro: { 
+          name: "pomodoro length:", 
+          duration: sections.pomodoro.duration, 
+          hours: Math.floor(sections.pomodoro.duration / 3600), 
+          minutes: Math.floor((sections.pomodoro.duration % 3600) / 60) 
+      },
+      short: { 
+          name: "short break length:", 
+          duration: sections.short.duration, 
+          hours: Math.floor(sections.short.duration / 3600), 
+          minutes: Math.floor((sections.short.duration % 3600) / 60) 
+      },
+      long: { 
+          name: "long break length:", 
+          duration: sections.long.duration, 
+          hours: Math.floor(sections.long.duration / 3600), 
+          minutes: Math.floor((sections.long.duration % 3600) / 60) 
+      }
+  });
+  }
 
   const convertToSeconds = (hours: number, minutes: number) => {
     const seconds = hours * 3600 + minutes * 60;
@@ -71,7 +95,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
 
   const handleShortMinChange = (event: number) => { 
     const duration = convertToSeconds(sectionItems.short.hours, event);
-    updatePomodoro(duration);
+    updateShort(duration);
   };
 
   const updateShort = (duration: number) => {
@@ -84,12 +108,22 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     }));
   };
 
-  const handleLongChange = (event: number) => {
+  const handleLongHrChange = (event: number) => {
+    const duration = convertToSeconds(event, sectionItems.long.minutes);
+    updateLong(duration);
+  };
+
+  const handleLongMinChange = (event: number) => { 
+    const duration = convertToSeconds(sectionItems.long.hours, event);
+    updateLong(duration);
+  };
+
+  const updateLong = (duration: number) => {
     setSectionItems(prevState => ({
       ...prevState,
       long: {
         ...prevState.long,
-        duration: event
+        duration: duration
       }
     }));
   };
@@ -112,16 +146,17 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     }));
     
     const activeSection = findActiveSection();
-
-    setTotal(sectionItems[activeSection].duration);
+    if (activeSection != null) {
+      setTotal(sectionItems[activeSection].duration);
+    }
 
     handleClose();
   };
 
-  const findActiveSection = () => {
+  const findActiveSection = (): keyof typeof sections | null => {
     const activeSection = Object.keys(sections).find((key) => sections[key as keyof typeof sections].active === true);
-    return activeSection ? activeSection as keyof typeof sections : 'pomodoro';
-  }
+    return activeSection ? activeSection as keyof typeof sections : null;
+  };
 
     return (
     <div>
@@ -186,7 +221,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
               min={0} 
               max={99} 
               value={sectionItems.long.hours} 
-              onChange={handleLongChange}
+              onChange={handleLongHrChange}
               />
               <p className="text-darkBlue font-semibold mx-2">hr</p>
               <InputNumber 
@@ -194,7 +229,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
               min={0} 
               max={99} 
               value={sectionItems.long.minutes} 
-              onChange={handleLongChange}
+              onChange={handleLongMinChange}
               />
               <p className="text-darkBlue font-semibold ml-2">min</p>
             </div>
