@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Reset from '../../assets/trash.svg';
 import Delete from '../../assets/delete-arrow.svg';
-import Popup from 'reactjs-popup';
 import SettingsMenu from './settingsMenu';
 import Loop from './loop';
 import 'reactjs-popup/dist/index.css';
@@ -26,9 +25,9 @@ interface SectionsState {
 
 const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     const [sections, setSections] = useState<SectionsState>({
-        pomodoro: { duration: 5, symbol: "⭐ ", active: true},
-        short: { duration: 4, symbol: "🌙 ", active: false},
-        long: { duration: 3, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
+        short: { duration: 300, symbol: "🌙 ", active: false},
+        long: { duration: 900, symbol: "🌕 ", active: false},
     })
     const [total, setTotal] = useState<number>(sections.pomodoro.duration);
     const [time, setTime] = useState<string>('');
@@ -175,7 +174,6 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
 
     const getTimeRemaining = () => {
         var temp = total;
-        console.log({temp});
 
         const hours = Math.floor(temp / 3600);
         temp %= 3600;
@@ -195,7 +193,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
 
         if ((total >= 0) && (hours != 0)) {
             setTime(
-                (minutes > 9 ? String(minutes) : "0" + String(minutes)) + ":" + 
+                (hours> 9 ? String(hours) : "0" + String(hours)) + ":" + 
                 (minutes > 9 ? String(minutes) : "0" + String(minutes)) + ":" +
                 (seconds > 9 ? String(seconds) : "0" + String(seconds))
               );

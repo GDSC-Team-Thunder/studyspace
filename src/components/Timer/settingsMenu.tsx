@@ -28,7 +28,6 @@ interface SettingsMenuProps {
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
 const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
   console.log({sections});
 
@@ -70,11 +69,13 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
 
   const handlePomodoroHrChange = (event: number) => {
     const duration = convertToSeconds(event, sectionItems.pomodoro.minutes);
+    console.log(`IDK:${duration} - ${event}:${sectionItems.pomodoro.minutes}`)
     updatePomodoro(duration);
   };
 
   const handlePomodoroMinChange = (event: number) => { 
     const duration = convertToSeconds(sectionItems.pomodoro.hours, event);
+    console.log(`IDK:${duration} - ${sectionItems.pomodoro.hours}:${event}`)
     updatePomodoro(duration);
   };
 
