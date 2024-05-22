@@ -106,7 +106,7 @@ const Scene = () => {
     };
   }, []);
 
-  return <div ref={refContainer} className='bg-bgColor/10 rounded-[25px] overflow-hidden' />;
+  return <div ref={refContainer} className='bg-bgColor/10 rounded-[25px] h-50% overflow-hidden' />;
 }
 
 export default Scene;

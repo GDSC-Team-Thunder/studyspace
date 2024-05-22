@@ -48,6 +48,10 @@ button {
   font-weight: 700;
 }
 
+button:active {
+  transform: translateY(3px);
+}
+
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
