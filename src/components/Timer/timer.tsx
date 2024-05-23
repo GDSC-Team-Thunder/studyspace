@@ -274,7 +274,3 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
   };
   
 export default Timer;
-
-// pause timer when menu is open
-// some bug where 2 things were active at the same time but idk how to replicate it...
-// when deleting everything from queue, current active section should be inactive
