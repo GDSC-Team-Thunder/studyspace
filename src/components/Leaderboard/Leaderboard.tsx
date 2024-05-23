@@ -36,6 +36,9 @@ export default function Leaderboard() {
                     ))}
                 </ul>
             </div>
+            <div className="mt-4">
+                <button className="text-base px-6 py-2 rounded-[10px]">add friends</button>
+            </div>
         </div>
 
 
