@@ -149,8 +149,8 @@ const Timer = () => {
     return (
         <div className='relative flex flex-col h-[85%] w-[52%] self-center justify-center'>
             <div className='relative flex flex-grow bg-bgColor/10 h-full w-full rounded-[25px] self-center justify-center'>
-                <div className='relative flex flex-col w-[75%] items-center self-center justify-between'>
-                    <div className='text-center h-full items-center justify-center'>
+                <div className='relative flex flex-col w-[75%] items-center self-center justify-center'>
+                    <div className='flex-grow text-center items-center justify-center'>
                         <h1 className='timer-text'>{time}</h1>
                         <div className='flex justify-center'>
                             <button className='bg-transparent p-0'>
@@ -173,7 +173,7 @@ const Timer = () => {
                             <button onClick={longButton} className='section-button'>long break 🌕</button>
                         </div>
                     </div>
-                    <div className='flex flex-col w-full text-left mt-20'>
+                    <div className='flex flex-col w-full text-left mt-auto'>
                         <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
                         <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
                             <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
@@ -189,7 +189,6 @@ const Timer = () => {
                     </div>
                 </div>
             </div>
-            <iframe className="flex rounded-[12px] w-full bg-transparent mt-2 h-[80px]" src="https://open.spotify.com/embed/playlist/3GJU6WCxTv5jeIhIttI8ae?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"/>
         </div>
     );
   };
