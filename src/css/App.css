@@ -1,4 +1,3 @@
-
 #root {
   margin: 0 auto;
   text-align: center;
@@ -30,10 +29,10 @@
   border-radius: 25px;
 }
 
-.middle-bg{
+.middle-bg {
   position: absolute;
 
-  background-color: #FDFDFD;
+  background-color: #fdfdfd;
   opacity: 0.1;
   border-radius: 25px;
 
@@ -66,10 +65,10 @@
   border-radius: 25px;
 }
 
-.side-bg{
+.side-bg {
   position: absolute;
 
-  background-color: #FCFBF8;
+  background-color: #fcfbf8;
   opacity: 0.1;
   border-radius: 25px;
 

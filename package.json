@@ -23,6 +23,7 @@
     "react-router-dom": "^6.23.0",
     "reactjs-popup": "^2.0.6",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "react-toastify": "^10.0.5",
     "three": "^0.162.0"
   },
   "devDependencies": {

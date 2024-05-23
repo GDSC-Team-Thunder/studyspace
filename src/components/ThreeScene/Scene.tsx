@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { useRef, useEffect } from "react";
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const Scene = () => {
   // Create a null reference to a div element
@@ -23,6 +23,7 @@ const Scene = () => {
     // TODO: Find a way to not hardcode the size
     renderer.setSize(400, 400);
     // renderer.setClearColor(0x000000);
+    // renderer.setClearColor(0x000000);
     renderer.setPixelRatio(window.devicePixelRatio);
     refContainer.current.appendChild(renderer.domElement);
 
@@ -40,7 +41,9 @@ const Scene = () => {
 
     for (let i = 0; i < 5000; i++) {
       const star = new THREE.Mesh(starGeometry, starMaterial);
-      const [x, y, z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(100));
+      const [x, y, z] = Array(3)
+        .fill(0)
+        .map(() => THREE.MathUtils.randFloatSpread(100));
       star.position.set(x, y, z);
       scene.add(star);
       stars.push(star);
@@ -49,43 +52,48 @@ const Scene = () => {
     camera.position.x = 0;
     camera.position.y = 1.5;
     camera.position.z = 3;
+    // camera.position.z = 3;
+    // camera.position.y = 1.5;
 
     const loader = new GLTFLoader();
-    loader.load('spaceship.glb', (gltf) => {
-      const spaceship = gltf.scene;
-      scene.add(spaceship);
-      spaceship.scale.set(0.8, 0.8, 0.8);
-      spaceship.position.set(-2, 0, -20); // Start slightly ahead in the z-axis
-      spaceship.rotation.y = Math.PI;
-      spaceship.rotation.x = 0.3;
+    loader.load(
+      "spaceship.glb",
+      (gltf) => {
+        const spaceship = gltf.scene;
+        scene.add(spaceship);
+        spaceship.scale.set(0.8, 0.8, 0.8);
+        spaceship.position.set(-2, 0, -20); // Start slightly ahead in the z-axis
+        // spaceship.position.set(0, -4, -20); // Start slightly ahead in the z-axis
+        spaceship.rotation.y = Math.PI;
+        spaceship.rotation.x = 0.3;
 
-      let wobbleAngle = 0;
-      const wobbleSpeed = 0.01;
-      const wobbleAmplitude = 0.2;
+        let wobbleAngle = 0;
+        const wobbleSpeed = 0.01;
+        const wobbleAmplitude = 0.2;
 
-      const animate = () => {
-        stars.forEach(star => {
-          star.position.z += 0.1; // Increase star speed
-          if (star.position.z > 50) {
-            // If a star moves out of the view, reset its position
-            star.position.z = -50;
-            star.position.x = THREE.MathUtils.randFloatSpread(100);
-            star.position.y = THREE.MathUtils.randFloatSpread(100);
-          }
-        });
+        const animate = () => {
+          stars.forEach((star) => {
+            star.position.z += 0.1; // Increase star speed
+            if (star.position.z > 50) {
+              // If a star moves out of the view, reset its position
+              star.position.z = -50;
+              star.position.x = THREE.MathUtils.randFloatSpread(100);
+              star.position.y = THREE.MathUtils.randFloatSpread(100);
+            }
+          });
 
-        wobbleAngle += wobbleSpeed;
+          wobbleAngle += wobbleSpeed;
 
-        spaceship.rotation.z = wobbleAmplitude * Math.cos(wobbleAngle);
+          spaceship.rotation.z = wobbleAmplitude * Math.cos(wobbleAngle);
 
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-      };
+          renderer.render(scene, camera);
+          requestAnimationFrame(animate);
+        };
 
-      animate();
-    },
+        animate();
+      },
       (xhr) => {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
       }
     );
 
@@ -98,15 +106,21 @@ const Scene = () => {
       camera.updateProjectionMatrix();
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       refContainer.current?.removeChild(renderer.domElement);
     };
   }, []);
 
-  return <div ref={refContainer} className='bg-bgColor/10 rounded-[25px] h-50% overflow-hidden' />;
-}
+  return (
+    <div
+      ref={refContainer}
+      className="bg-bgColor/10 rounded-[25px] h-50% overflow-hidden"
+    />
+  );
+  // return <div ref={refContainer} />;
+};
 
 export default Scene;
