@@ -9,8 +9,10 @@ export default function Leaderboard() {
     miles: string;
   }
 
-  async function getFriendsList(id: string) {
-    axios.get();
+  async function getFriends() {
+    axios.get(`http://localhost:8001`).then((res) => {
+      const friendsList = res.data;
+    });
   }
 
   //MAKE get call to get times for all friends, compare and then rank friends
