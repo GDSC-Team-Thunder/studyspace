@@ -2,10 +2,49 @@ import Timer from "../Timer/timer.tsx";
 import List from "../ToDoList/List.tsx";
 import Right from "../right.tsx";
 import "../../css/App.css";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Home() {
+  const navigate = useNavigate();
+  const [cookies, removeCookie] = useCookies(["token"]);
+  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const verifyCookie = async () => {
+      console.log("me", cookies);
+      // if (!cookies.token) {
+      //   console.log("oops");
+      //   navigate("/login");
+      //   return;
+      // }
+      const { data } = await axios.post(
+        "http://localhost:8000/auth/verify",
+        {},
+        { withCredentials: true }
+      );
+      console.log("hahaha", cookies.token);
+
+      const { status, user, userid } = data;
+      setUsername(user);
+      setUserId(userid);
+      return status
+        ? console.log("success")
+        : (removeCookie("token", {}),
+          navigate("/login"),
+          console.log("failed"));
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
+
   return (
     <div className="App">
+      <h1>
+        Hello, {username}, {userId}
+      </h1>
       <div className="flex justify-between flex-row h-screen w-[95vw]">
         <List />
         <Timer />
