@@ -44,7 +44,7 @@ export default function List() {
   };
 
   return (
-    <div className="relative flex flex-col h-[85%] w-[22.5%] self-center">
+    <div className="relative flex flex-col h-[95%] w-[22.5%] self-center">
       <div className="relative flex flex-col h-full w-full bg-bgColor/10 
               rounded-[25px] self-center py-5 px-4 justify-between">
         <div className="flex flex-col">

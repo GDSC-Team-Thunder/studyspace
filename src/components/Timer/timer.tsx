@@ -179,7 +179,7 @@ const Timer = () => {
     };
 
     return (
-        <div className='relative flex flex-col h-[85%] w-[52%] self-center justify-center'>
+        <div className='relative flex flex-col h-[95%] w-[52%] self-center justify-center'>
             <div className='relative flex flex-grow bg-bgColor/10 h-full w-full rounded-[25px] self-center justify-center'>
                 <div className='relative flex flex-col w-[75%] items-center self-center justify-center'>
                     <div className='flex-grow text-center items-center justify-center'>
