@@ -2,6 +2,7 @@ import { useState } from "react";
 import Task from "./Task";
 import IncompleteTask from "./IncompleteTask";
 import CompleteTask from "./CompleteTask";
+import SideCol from "../SideCol";
 
 export default function List() {
   const [todo, editTodo] = useState<Task[]>([]);
