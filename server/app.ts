@@ -3,14 +3,23 @@ import { Application } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Router } from "express";
 import { User } from "./models/users";
 import bcrypt from "bcryptjs";
+import userVerification from "./Middlewares/AuthMiddleware";
+import cookieParser from "cookie-parser";
 
 const PORT: number = 8000;
 
 const app: Application = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
+
 dotenv.config();
 app.use(express.json());
 app.use(
@@ -19,11 +28,20 @@ app.use(
   })
 );
 
+function createToken(_id: any) {
+  const jwt = require("jsonwebtoken");
+  const JWT_SECRET_KEY = process.env.JWT_SECRET || console.log("ERROR");
+  const token = jwt.sign({ _id }, JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+  return token;
+}
+
 app.get("/", (req, res) => {
   res.send("<h1>Welcome To JWT Authentication </h1>");
 });
 app.listen(PORT, async () => {
-  console.log(`🗄️ Server Fire on http:localhost//${PORT}`);
+  console.log(`🗄️ Server Fire on http://localhost:${PORT}`);
   try {
     await mongoose.connect(process.env.DATABASE_URL as string);
     console.log("🛢️ Connected To Database");
@@ -32,7 +50,7 @@ app.listen(PORT, async () => {
   }
 });
 
-app.post("/auth/register", async (req, res) => {
+app.post("/auth/register", async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
 
@@ -53,6 +71,11 @@ app.post("/auth/register", async (req, res) => {
       username,
       password: hashedPassword, // Store hashed password
     });
+    const token = createToken(newUser._id);
+    res.cookie("token", token, {
+      httpOnly: false,
+      sameSite: "lax",
+    });
 
     res.status(200).json({
       status: 200,
@@ -60,6 +83,7 @@ app.post("/auth/register", async (req, res) => {
       message: "User created Successfully",
       user: newUser,
     });
+    next();
   } catch (error: any) {
     console.log(error);
 
@@ -70,7 +94,7 @@ app.post("/auth/register", async (req, res) => {
   }
 });
 
-app.post("/auth/login", async (req, res) => {
+app.post("/auth/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -94,15 +118,11 @@ app.post("/auth/login", async (req, res) => {
       });
     }
 
-    const jwt = require("jsonwebtoken");
-    const JWT_SECRET_KEY = process.env.JWT_SECRET || console.log("ERROR");
-    const token = jwt.sign(
-      { _id: user._id, email: user.email },
-      JWT_SECRET_KEY,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      }
-    );
+    const token = createToken(user._id);
+    res.cookie("token", token, {
+      httpOnly: false,
+      sameSite: "lax",
+    });
 
     res.status(200).json({
       status: 200,
@@ -110,6 +130,7 @@ app.post("/auth/login", async (req, res) => {
       message: "Login successful",
       token: token,
     });
+    next();
   } catch (error: any) {
     res.status(400).json({
       status: 400,
@@ -118,9 +139,10 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
+app.post("/auth/verify", userVerification);
+
 app.get("/:id", async (req, res) => {
   try {
-    // Fetch current user from the database as JSON
     const users = await User.findById(req.params.id);
     return res.status(200).json(users);
   } catch (err) {
@@ -131,18 +153,15 @@ app.get("/:id", async (req, res) => {
 app.get("/auth", async (req, res) => {
   try {
     const { email } = req.body;
-    // Fetch current user from the database as JSON
-    const user = await User.findOne({ email }); // Use findOne instead of findById
-    return res.status(200).json(user); // Changed 'users' to 'user' since it's a single user
+    const user = await User.findOne({ email });
+    return res.status(200).json(user);
   } catch (err) {
     return res.status(500).json({ error: err });
   }
 });
 
-// Update (Put) method for updating user info in mongoDB
 app.put("/:id", async (req, res) => {
   try {
-    // Extract data from request body
     const {
       username,
       password,
@@ -153,22 +172,18 @@ app.put("/:id", async (req, res) => {
       friends,
     } = req.body;
 
-    // Find the user by ID
-
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: `User ${req.params.id} not found` });
     }
 
     let hashedPassword;
-    //Generate hashed password for updated password
     if (password) {
       const salt = await bcrypt.genSalt(10);
       hashedPassword = await bcrypt.hash(password, salt);
     }
 
-    // Update user properties
-    user.username = username ?? user.username; // Only update if it is provided
+    user.username = username ?? user.username;
     user.password = hashedPassword ?? user.password;
     user.pomodoro = pomodoro ?? user.pomodoro;
     user.shortBreak = shortBreak ?? user.shortBreak;
@@ -176,7 +191,6 @@ app.put("/:id", async (req, res) => {
     user.timeSpent = timeSpent ?? user.timeSpent;
     user.friends = friends ?? user.friends;
 
-    // Save the updated user
     const updatedUser = await user.save();
     return res.status(200).json(updatedUser);
   } catch (err: any) {
@@ -185,10 +199,8 @@ app.put("/:id", async (req, res) => {
   }
 });
 
-// Delete operation, for removing user from mongoDB
 app.delete("/:id", async (req, res) => {
   try {
-    // Find the user by ID and delete it
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).json({ error: `User not found` });
@@ -199,4 +211,4 @@ app.delete("/:id", async (req, res) => {
   } catch (err: any) {
     return res.status(500).json({ error: err });
   }
-}); // End Delete Route
+});
