@@ -39,7 +39,7 @@ function Home() {
 
   return (
     <div className="flex justify-center items-center flex-col h-screen w-screen">
-      <div className="flex flex-row justify-between items-center mt-5 w-[95vw]">
+      <div className="flex flex-row justify-between items-center w-[95vw] mt-5">
         <p className="flex-grow-0 text-[48px] font-bold">studyspace</p>
         <div className="flex flex-row ml-auto space-x-4">
           <p
@@ -56,7 +56,7 @@ function Home() {
           </p>
         </div>
       </div>
-      <div className="flex justify-between flex-row h-screen w-[95vw]">
+      <div className="flex flex-grow justify-between flex-row h-[85%] w-[95vw]">
         {!hideSidebars && <List />}
         <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars} />
         {!hideSidebars && <Right />}

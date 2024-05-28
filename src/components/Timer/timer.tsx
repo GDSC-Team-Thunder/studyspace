@@ -259,48 +259,8 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
   };
 
   return (
-    // <div className='relative flex flex-col h-[95%] w-[52%] self-center justify-center'>
-    //     <div className='relative flex flex-grow bg-bgColor/10 h-full w-full rounded-[25px] self-center justify-center'>
-    //         <div className='relative flex flex-col w-[75%] items-center self-center justify-center'>
-    //             <div className='flex-grow text-center items-center justify-center'>
-    //                 <h1 className='timer-text'>{time}</h1>
-    //                 <div className='flex justify-center'>
-    //                     <button className='bg-transparent p-0'>
-    //                             <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={Settings} alt="settings"></img>
-    //                     </button>
-    //                     <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
-    //                     { loopQueue.length == 0 ?
-    //                         <button onClick={loopButton} className='bg-transparent p-0'>
-    //                             <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={BlueLoop} alt="settings"></img>
-    //                         </button>
-    //                         : <button onClick={loopButton} className='bg-transparent p-0'>
-    //                             <img className='w-[50px] h-[50px] mx-4 flex-shrink-0' src={OrangeLoop} alt="settings"></img>
-    //                         </button>
-    //                     }
-    //                 </div>
-    //                 <br></br>
-    //                 <div className='flex justify-center items-center space-x-2'>
-    //                     <button onClick={pomodoroButton} className='section-button'>{pomodoroText}</button>
-    //                     <button onClick={shortButton} className='section-button'>{shortBreakText}</button>
-    //                     <button onClick={longButton} className='section-button'>{longBreakText}</button>
-    //                 </div>
-    //             </div>
-    //             <div className='flex flex-col w-full text-left mt-auto'>
-    //                 <h2 className='text-[20px] ml-1 my-1 font-bold'>queue</h2>
-    //                 <div className='bg-darkBlue rounded-[25px] w-full h-9 px-3 py-1 flex justify-between items-center overflow-hidden'>
-    //                     <p className='whitespace-nowrap overflow-hidden'>{queue}</p>
-    //                     <div className='flex items-center'>
-    //                         <button className='bg-transparent p-0 m-0'>
-    //                             <img onClick={deleteButton} className='w-[30px] h-[30px] mx-2 my-0 flex-shrink-0' src={Delete} alt="delete" />
-    //                         </button>
-    //                         <button className='bg-transparent p-0 m-0'>
-    //                             <img onClick={clearQueue} className='w-[22px] h-[22px] my-0 flex-shrink-0' src={Reset} alt="reset" />
-    //                         </button>
-    //                     </div>
-    //                 </div>
-    //             </div>
     <div
-      className={`relative flex flex-col bg-bgColor/10 h-[85%] rounded-[25px] self-center justify-center ${
+      className={`relative flex flex-col bg-bgColor/10 h-[95%] rounded-[25px] self-center justify-center ${
         !hideSidebars ? "w-[52%]" : "w-[100%]"
       }`}
     >
@@ -335,7 +295,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              pomodoro ⭐
+              {pomodoroText}
             </button>
             <button
               onClick={shortButton}
@@ -345,7 +305,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              short break 🌙
+              {shortBreakText}
             </button>
             <button
               onClick={longButton}
@@ -355,7 +315,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              long break 🌕
+              {longBreakText}
             </button>
           </div>
         </div>
