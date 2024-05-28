@@ -1,31 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popup from "./popup";
 import axios from "axios";
 
-export default function Leaderboard() {
+interface LeaderboardProps {
+  userId: string;
+}
+interface Friend {
+  userId: string;
+  username: string;
+  timespent: number;
+}
+
+const Leaderboard: React.FC<LeaderboardProps> = ({ userId }) => {
   interface Ranking {
     name: string;
     rank: string;
     miles: string;
   }
+  const [friends, setFriends] = useState<Friend[]>([]);
+  console.log(friends);
+  const [rankings, setRankings] = useState<Ranking[]>([]);
 
-  async function getFriends() {
-    axios.get(`http://localhost:8001`).then((res) => {
-      const friendsList = res.data;
-    });
-  }
+  useEffect(() => {
+    const fetchFriendsData = async () => {
+      if (userId) {
+        try {
+          const res = await axios.get(`http://localhost:8000/${userId}`);
+          const friendsList = res.data.friends;
+          const currentUser = {
+            userId: userId,
+            username: res.data.username,
+            timespent: res.data.timeSpent,
+          };
 
-  //MAKE get call to get times for all friends, compare and then rank friends
-  //MAKE popup for add friends to enter "friend code"
+          const friendsDataPromises = friendsList.map(
+            async (friendId: string) => {
+              const friendRes = await axios.get(
+                `http://localhost:8000/${friendId}`
+              );
+              return {
+                userId: friendId,
+                username: friendRes.data.username,
+                timespent: friendRes.data.timeSpent,
+              };
+            }
+          );
 
-  const rankings: Ranking[] = [
-    { name: "varunski", rank: "1st", miles: "12,345 miles" },
-    { name: "justinsucksatlife", rank: "2nd", miles: "2,000 miles" },
-    { name: "Iwantagreencard", rank: "3rd", miles: "1,999 miles" },
-    { name: "jonam4life", rank: "4th", miles: "12 miles" },
-    { name: "klyle", rank: "5th", miles: "6 miles" },
-    { name: "sir_milo", rank: "6th", miles: "1 mile" },
-  ];
+          const friendsData = await Promise.all(friendsDataPromises);
+          setFriends(friendsData);
+          const combinedData = [currentUser, ...friendsData];
+
+          // Sort by timespent in descending order
+          combinedData.sort((a, b) => b.timespent - a.timespent);
+
+          const formattedRankings = combinedData.map((user, index) => {
+            const rankSuffix =
+              index + 1 === 1
+                ? "st"
+                : index + 1 === 2
+                ? "nd"
+                : index + 1 === 3
+                ? "rd"
+                : "th";
+            return {
+              name: user.username,
+              rank: `${index + 1}${rankSuffix}`,
+              miles: `${user.timespent} miles`,
+            };
+          });
+
+          setRankings(formattedRankings);
+        } catch (error) {
+          console.error("Error fetching friends data:", error);
+        }
+      }
+    };
+
+    fetchFriendsData();
+  }, [rankings, userId]);
 
   return (
     <div className="bg-bgColor/10 rounded-[25px] self-center w-full h-[50%] p-6 flex flex-col">
@@ -34,22 +86,24 @@ export default function Leaderboard() {
       </h1>
       <div className="flex-grow overflow-auto scrollbar-hide">
         <ul>
-          {rankings.map((ranking) => (
+          {rankings.map((user) => (
             <li className="flex flex-row bg-darkBlue h-14 items-center text-left p-2 px-3 my-3 rounded-[15px]">
               <div className="flex bg-hotPink min-h-10 min-w-10 mr-3 rounded-[25px] justify-center items-center">
-                <h1 className="font-black text-base">{ranking.rank}</h1>
+                <h1 className="font-black text-base">{user.rank}</h1>
               </div>
               <div className="flex flex-col overflow-x-auto scrollbar-hide">
-                <h2 className="font-black text-lg">{ranking.name}</h2>
-                <p className="font-bold text-xs">{ranking.miles}</p>
+                <h2 className="font-black text-lg">{user.name}</h2>
+                <p className="font-bold text-xs">{user.miles}</p>
               </div>
             </li>
           ))}
         </ul>
       </div>
       <div className="mt-4">
-        <Popup />
+        <Popup userId={userId} />
       </div>
     </div>
   );
-}
+};
+
+export default Leaderboard;
