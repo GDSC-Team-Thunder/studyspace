@@ -8,7 +8,7 @@ function Home() {
   return (
     <div className="App">
       <Header/>
-      <div className="flex justify-between align-top flex-row w-[95vw] mt-0">
+      <div className="flex justify-between align-top flex-row w-[95vw]">
         <List />
         <Timer />
         <Right />

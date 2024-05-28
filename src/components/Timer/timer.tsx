@@ -13,7 +13,7 @@ import "../../css/timer.css";
 const Timer = () => {
   const [sections, setSections] = useState({
     pomodoro: { duration: 1500, symbol: "⭐ ", active: true },
-    short: { duration: 300, symbol: "🌙 ", active: false },
+    short: { duration: 30, symbol: "🌙 ", active: false },
     long: { duration: 900, symbol: "🌕 ", active: false },
   });
   const [total, setTotal] = useState(sections.pomodoro.duration);
@@ -31,6 +31,7 @@ const Timer = () => {
   const [loopCurrent, setLoopCurrent] = useState(0);
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
   const [svgColor, setSvgColor] = useState("#260093");
+  const [elapsedTime, setElapsedTime] = useState(0); // New state for elapsed time
 
   useEffect(() => {
     updateTimer();
@@ -44,7 +45,13 @@ const Timer = () => {
 
     if (isRunning) {
       const intervalId = setInterval(() => {
-        setTotal((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : prevTotal));
+        setTotal((prevTotal) => {
+          if (prevTotal > 0) {
+            setElapsedTime((prevElapsed) => prevElapsed + 1);
+            return prevTotal - 1;
+          }
+          return prevTotal;
+        });
       }, 1000);
 
       updateTimer();
@@ -123,6 +130,7 @@ const Timer = () => {
 
     const newTime = getDurationBySymbol(newIcon);
     setTotal(newTime);
+    setElapsedTime(0); // Reset elapsed time
   };
   const loopQueueNext = () => {
     if (loopCurrent == loopQueue.length) {
@@ -133,6 +141,7 @@ const Timer = () => {
 
     const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
     setTotal(newTime);
+    setElapsedTime(0); // Reset elapsed time
   };
 
   const updateTimer = () => {
@@ -190,7 +199,7 @@ const Timer = () => {
             )}
           </div>
           <div className="mt-5">
-          <ProgressBar />
+          <ProgressBar isRunning={isRunning} total={total} elapsedTime={elapsedTime} />
           </div>
           <br></br>
           <div className="flex justify-center items-center space-x-2">

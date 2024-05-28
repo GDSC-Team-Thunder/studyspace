@@ -10,27 +10,24 @@ function Header() {
     };
 
   return (
-    <div className="flex justify-between items-center text-offWhite py-5 px-14 w-full">
-      <Link to="/" className="text-3xl font-bold flex-shrink-0">
+    <div className="flex justify-between items-center text-offWhite py-0 px-14 w-full">
+      <Link to="/" className="text-5xl font-bold flex-shrink-0">
         studyspace
       </Link>
       <div className="flex justify-between space-x-10">
   {isLoggedIn ? (
     <>
-      <Link to="/" className="font-bold">
-        StudySpace
-      </Link>
       <span className="font-bold">{username}</span>
-      <button onClick={handleLogout} className="font-bold">
-        Logout
-      </button>
+      <Link to="/" className="text-xl font-bold">
+        Varun_Thakkar 
+      </Link>
     </>
   ) : (
     <>
-      <Link to="/signup" className="font-bold">
+      <Link to="/signup" className="text-xl font-bold">
         Sign Up
       </Link>
-      <Link to="/login" className="font-bold">
+      <Link to="/login" className="text-xl font-bold">
         Log In
       </Link>
     </>
