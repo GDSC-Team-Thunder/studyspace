@@ -35,15 +35,17 @@ function Home() {
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
 
+  const [hideSidebars, setHideSidebars] = useState<boolean>(false);
+
   return (
     <div className="App">
       <h1>
         Hello, {username}, {userId}
       </h1>
       <div className="flex justify-between flex-row h-screen w-[95vw]">
-        <List />
-        <Timer />
-        <Right />
+        {!hideSidebars && <List />}
+        <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars} />
+        {!hideSidebars && <Right />}
       </div>
     </div>
   );

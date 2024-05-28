@@ -9,12 +9,15 @@ export default {
       colors: {
         darkBlue: '#1D006F',
         hotPink: '#F32FBC',
-        orange: '#FFC806',
+        orangey: '#FF9C06',
         offWhite: '#FDFDFD',
         bgColor: '#FCFBF8',
       },
     },
   },
+  plugins: [
+    require('tailwind-scrollbar-hide')
+  ],
   ins: [],
 }
 
