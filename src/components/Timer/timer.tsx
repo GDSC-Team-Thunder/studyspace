@@ -24,6 +24,38 @@ const Timer = () => {
     const [loopQueue, setLoopQueue] = useState<string[]>([]);
     const [svgColor, setSvgColor] = useState('#260093');
 
+    //Resizing hooks
+    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+    const [pomodoroText, setPomodoroText] = useState<string>("pomodoro ⭐");
+    const [shortBreakText, setShortBreakText] = useState<string>("short break 🌙");
+    const [longBreakText, setLongBreakText] = useState<string>("long break 🌕");
+
+    //Resize window
+    useEffect(() => {
+        const handleResize = () => {
+          setWindowWidth(window.innerWidth);
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (windowWidth < 1100) {
+            setPomodoroText("⭐");
+            setShortBreakText("🌙");
+            setLongBreakText("🌕");
+        }
+        else {
+            setPomodoroText("pomodoro ⭐");
+            setShortBreakText("short break 🌙");
+            setLongBreakText("long break 🌕");
+        }
+    }, [windowWidth]);
+
     useEffect(() => {
         updateTimer();
 
@@ -168,9 +200,9 @@ const Timer = () => {
                         </div>
                         <br></br>
                         <div className='flex justify-center items-center space-x-2'>
-                            <button onClick={pomodoroButton} className='section-button'>pomodoro ⭐</button>
-                            <button onClick={shortButton} className='section-button'>short break 🌙</button>
-                            <button onClick={longButton} className='section-button'>long break 🌕</button>
+                            <button onClick={pomodoroButton} className='section-button'>{pomodoroText}</button>
+                            <button onClick={shortButton} className='section-button'>{shortBreakText}</button>
+                            <button onClick={longButton} className='section-button'>{longBreakText}</button>
                         </div>
                     </div>
                     <div className='flex flex-col w-full text-left mt-auto'>

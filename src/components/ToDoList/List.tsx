@@ -70,7 +70,7 @@ export default function List() {
         </div>
         <label className="flex flex-row items-center justify-between">
           <input
-            className="flex-grow h-10 pl-3 mr-2.5 rounded-full bg-[#1D006F] placeholder:text-white text-white h-full"
+            className="flex-grow h-10 px-3 mr-2.5 rounded-full bg-[#1D006F] placeholder:text-white text-white h-full overflow-hidden"
             placeholder="add items here..."
             value={addText}
             onChange={(e) => setAddText(e.target.value)}
@@ -82,10 +82,7 @@ export default function List() {
                         addText.length == 0 && "bg-gray-400"
                       }`}
             disabled={addText.length == 0}
-            onClick={addTask}
-          >
-            +
-          </button>
+            onClick={addTask}>+</button>
         </label>
       </div>
       <iframe className="flex rounded-[12px] w-full bg-transparent mt-3 h-[80px]" src="https://open.spotify.com/embed/playlist/3GJU6WCxTv5jeIhIttI8ae?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"/>
