@@ -73,9 +73,8 @@ app.post("/auth/register", async (req, res, next) => {
     });
     const token = createToken(newUser._id);
     res.cookie("token", token, {
-      httpOnly: true,
-      // sameSite: "lax", // or 'Strict' if it suits your needs
-      secure: false, // Set to true if using HTTPS
+      httpOnly: false,
+      sameSite: "lax",
     });
 
     res.status(200).json({
@@ -121,9 +120,8 @@ app.post("/auth/login", async (req, res, next) => {
 
     const token = createToken(user._id);
     res.cookie("token", token, {
-      httpOnly: true,
-      // sameSite: "lax", // or 'Strict' if it suits your needs
-      secure: false, // Set to true if using HTTPS
+      httpOnly: false,
+      sameSite: "lax",
     });
 
     res.status(200).json({

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Home() {
+  axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies(["token"]);
   const [username, setUsername] = useState("");
@@ -15,27 +16,21 @@ function Home() {
 
   useEffect(() => {
     const verifyCookie = async () => {
-      console.log("me", cookies);
-      // if (!cookies.token) {
-      //   console.log("oops");
-      //   navigate("/login");
-      //   return;
-      // }
+      if (!cookies.token) {
+        navigate("/login");
+        return;
+      }
       const { data } = await axios.post(
         "http://localhost:8000/auth/verify",
         {},
         { withCredentials: true }
       );
-      console.log("hahaha", cookies.token);
-
       const { status, user, userid } = data;
       setUsername(user);
       setUserId(userid);
       return status
         ? console.log("success")
-        : (removeCookie("token", {}),
-          navigate("/login"),
-          console.log("failed"));
+        : (removeCookie("token", {}), navigate("/login"), console.log(status));
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
