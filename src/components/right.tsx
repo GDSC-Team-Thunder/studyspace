@@ -1,11 +1,15 @@
 import Scene from "./ThreeScene/Scene";
 import Leaderboard from "./Leaderboard/Leaderboard.tsx";
 
-const Right = () => {
+interface RightProps {
+  userId: string;
+}
+
+const Right: React.FC<RightProps> = ({ userId }) => {
   return (
     <div className="relative flex flex-col h-[85%] self-center w-[22.5%] justify-between gap-4">
       <Scene />
-      <Leaderboard />
+      <Leaderboard userId={userId} />
     </div>
   );
 };
