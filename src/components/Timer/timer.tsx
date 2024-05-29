@@ -10,94 +10,106 @@ import SettingsMenu from "./timer-settings";
 import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
 
+type SectionKey = "pomodoro" | "short" | "long";
+
 const Timer = () => {
   const [sections, setSections] = useState({
-    pomodoro: { duration: 1500, symbol: "⭐ ", active: true },
-    short: { duration: 30, symbol: "🌙 ", active: false },
-    long: { duration: 900, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 1500, symbol: "⭐", active: true },
+    short: { duration: 300, symbol: "🌙", active: false },
+    long: { duration: 900, symbol: "🌕", active: false },
   });
+  const [currentSection, setCurrentSection] = useState<SectionKey>("pomodoro");
   const [total, setTotal] = useState(sections.pomodoro.duration);
-  const [time, setTime] = useState();
+  const [time, setTime] = useState("");
   const [isRunning, setIsRunning] = useState(false);
-  const [queue, setQueue] = useState([
-    "⭐ ",
-    "🌙 ",
-    "⭐ ",
-    "🌙 ",
-    "⭐ ",
-    "🌕 ",
-  ]);
+  const [queue, setQueue] = useState(["⭐", "🌙", "⭐", "🌙", "⭐", "🌕"]);
   const [isLooping, setIsLooping] = useState(false);
   const [loopCurrent, setLoopCurrent] = useState(0);
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
-  const [svgColor, setSvgColor] = useState("#260093");
-  const [elapsedTime, setElapsedTime] = useState(0); // New state for elapsed time
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     updateTimer();
 
     if (total === 0) {
-      if (loopQueue.length != 0) {
+      if (loopQueue.length !== 0) {
         loopQueueNext();
+      } else {
+        queueNext();
       }
-      queueNext();
     }
 
+    let intervalId: number | undefined;
     if (isRunning) {
-      const intervalId = setInterval(() => {
-        setTotal((prevTotal) => {
-          if (prevTotal > 0) {
-            setElapsedTime((prevElapsed) => prevElapsed + 1);
-            return prevTotal - 1;
-          }
-          return prevTotal;
+      intervalId = setInterval(() => {
+        setElapsedTime((prevElapsedTime) => {
+          const newElapsedTime = prevElapsedTime + 1;
+          setTotal((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : 0));
+          return newElapsedTime;
         });
       }, 1000);
 
       updateTimer();
-      return () => clearInterval(intervalId);
+    } else {
+      clearInterval(intervalId);
     }
-  }, [isRunning, total]);
+
+    return () => clearInterval(intervalId);
+  }, [isRunning, total, loopQueue]);
+
+  const handleModeChange = (mode: SectionKey) => {
+    setCurrentSection(mode);
+    setTotal(sections[mode].duration); // Set total duration based on the selected mode
+    setElapsedTime(0); // Reset elapsed time
+  };
 
   const timerButton = () => {
     setIsRunning((prevIsRunning) => !prevIsRunning);
   };
+
   const pomodoroButton = () => {
-    if (queue.length == 0) {
-      setTotal(sections.pomodoro.duration);
-    }
+    setCurrentSection("pomodoro");
+    setTotal(sections.pomodoro.duration);
+    setElapsedTime(0); // Reset elapsed time
     setQueue((prevQueue) => [...prevQueue, sections.pomodoro.symbol]);
   };
+
   const shortButton = () => {
-    if (queue.length == 0) {
-      setTotal(sections.short.duration);
-    }
+    setCurrentSection("short");
+    setTotal(sections.short.duration);
+    setElapsedTime(0); // Reset elapsed time
     setQueue((prevQueue) => [...prevQueue, sections.short.symbol]);
   };
+
   const longButton = () => {
-    if (queue.length == 0) {
-      setTotal(sections.long.duration);
-    }
+    setCurrentSection("long");
+    setTotal(sections.long.duration);
+    setElapsedTime(0); // Reset elapsed time
     setQueue((prevQueue) => [...prevQueue, sections.long.symbol]);
   };
+
   const deleteButton = () => {
     setQueue((prevQueue) => {
       const newQueue = [...prevQueue];
       newQueue.pop();
 
-      if (newQueue.length == 0) {
+      if (newQueue.length === 0) {
         setTotal(0);
         setIsRunning(false);
+        setElapsedTime(0); // Reset elapsed time
       }
 
       return newQueue;
     });
   };
+
   const clearQueue = () => {
     setQueue([]);
     setTotal(0);
     setIsRunning(false);
+    setElapsedTime(0); // Reset elapsed time
   };
+
   const loopButton = () => {
     setIsLooping((prevIsLooping) => !prevIsLooping);
     // if
@@ -105,7 +117,7 @@ const Timer = () => {
   };
 
   const getTimeRemaining = () => {
-    var temp = total;
+    let temp = total;
 
     const hours = Math.floor(temp / 3600);
     temp %= 3600;
@@ -132,8 +144,9 @@ const Timer = () => {
     setTotal(newTime);
     setElapsedTime(0); // Reset elapsed time
   };
+
   const loopQueueNext = () => {
-    if (loopCurrent == loopQueue.length) {
+    if (loopCurrent === loopQueue.length) {
       setLoopCurrent(0);
     } else {
       setLoopCurrent(loopCurrent + 1);
@@ -147,19 +160,13 @@ const Timer = () => {
   const updateTimer = () => {
     let { hours, minutes, seconds } = getTimeRemaining();
 
-    if (total >= 0 && hours != 0) {
+    if (total >= 0 && hours !== 0) {
       setTime(
-        (minutes > 9 ? String(minutes) : "0" + String(minutes)) +
-          ":" +
-          (minutes > 9 ? String(minutes) : "0" + String(minutes)) +
-          ":" +
-          (seconds > 9 ? String(seconds) : "0" + String(seconds))
+        `${hours}:${minutes > 9 ? String(minutes) : "0" + String(minutes)}:${seconds > 9 ? String(seconds) : "0" + String(seconds)}`
       );
     } else if (total >= 0) {
       setTime(
-        (minutes > 9 ? String(minutes) : "0" + String(minutes)) +
-          ":" +
-          (seconds > 9 ? String(seconds) : "0" + String(seconds))
+        `${minutes > 9 ? String(minutes) : "0" + String(minutes)}:${seconds > 9 ? String(seconds) : "0" + String(seconds)}`
       );
     }
   };
@@ -171,35 +178,23 @@ const Timer = () => {
           <h1 className="timer-text">{time}</h1>
           <div className="flex justify-center">
             <button className="bg-transparent p-0">
-              <img
-                className="w-[50px] h-[50px] mx-4 flex-shrink-0"
-                src={Settings}
-                alt="settings"
-              ></img>
+              <img className="w-[50px] h-[50px] mx-4 flex-shrink-0" src={Settings} alt="settings"></img>
             </button>
             <button onClick={timerButton} className="timer-button">
               {isRunning ? "pause" : "start"}
             </button>
-            {loopQueue.length == 0 ? (
+            {loopQueue.length === 0 ? (
               <button onClick={loopButton} className="bg-transparent p-0">
-                <img
-                  className="w-[50px] h-[50px] mx-4 flex-shrink-0"
-                  src={BlueLoop}
-                  alt="settings"
-                ></img>
+                <img className="w-[50px] h-[50px] mx-4 flex-shrink-0" src={BlueLoop} alt="settings"></img>
               </button>
             ) : (
               <button onClick={loopButton} className="bg-transparent p-0">
-                <img
-                  className="w-[50px] h-[50px] mx-4 flex-shrink-0"
-                  src={OrangeLoop}
-                  alt="settings"
-                ></img>
+                <img className="w-[50px] h-[50px] mx-4 flex-shrink-0" src={OrangeLoop} alt="settings"></img>
               </button>
             )}
           </div>
           <div className="mt-5">
-          <ProgressBar isRunning={isRunning} total={total} elapsedTime={elapsedTime} />
+            <ProgressBar elapsedTime={elapsedTime} total={sections[currentSection].duration} />
           </div>
           <br></br>
           <div className="flex justify-center items-center space-x-2">
@@ -220,20 +215,10 @@ const Timer = () => {
             <p className="whitespace-nowrap overflow-hidden">{queue}</p>
             <div className="flex items-center">
               <button className="bg-transparent p-0 m-0">
-                <img
-                  onClick={deleteButton}
-                  className="w-[30px] h-[30px] mx-2 my-0 flex-shrink-0"
-                  src={Delete}
-                  alt="delete"
-                />
+                <img onClick={deleteButton} className="w-[30px] h-[30px] mx-2 my-0 flex-shrink-0" src={Delete} alt="delete" />
               </button>
               <button className="bg-transparent p-0 m-0">
-                <img
-                  onClick={clearQueue}
-                  className="w-[22px] h-[22px] my-0 flex-shrink-0"
-                  src={Reset}
-                  alt="reset"
-                />
+                <img onClick={clearQueue} className="w-[22px] h-[22px] my-0 flex-shrink-0" src={Reset} alt="reset"></img>
               </button>
             </div>
           </div>
