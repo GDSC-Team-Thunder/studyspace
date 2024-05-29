@@ -17,7 +17,7 @@ const Scene = () => {
 
     // If mounted properly, create a scene
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 5000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
     // TODO: Find a way to not hardcode the size
@@ -38,7 +38,7 @@ const Scene = () => {
     const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const stars: THREE.Mesh[] = [];
 
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < 6000; i++) {
       const star = new THREE.Mesh(starGeometry, starMaterial);
       const [x, y, z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(100));
       star.position.set(x, y, z);
@@ -63,12 +63,31 @@ const Scene = () => {
       const wobbleSpeed = 0.01;
       const wobbleAmplitude = 0.2;
 
+      // const addPlanet = () => {
+      //   const planetGeometry = new THREE.SphereGeometry(1, 32, 32);
+      //   const planetMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 }); // Green color
+      //   const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+      //
+      //   const planetX = THREE.MathUtils.randFloatSpread(100);
+      //   const planetY = THREE.MathUtils.randFloatSpread(100);
+      //   const planetZ = -10;
+      //
+      //   if (Math.abs(planetX) < 2 && Math.abs(planetY) < 2) {
+      //     planet.position.set(planetX + 10, planetY + 10, planetZ);
+      //   } else {
+      //     planet.position.set(planetX, planetY, planetZ);
+      //   }
+      //
+      //   scene.add(planet);
+      //   return planet;
+      // };
+
       const animate = () => {
         stars.forEach(star => {
           star.position.z += 0.1; // Increase star speed
           if (star.position.z > 50) {
             // If a star moves out of the view, reset its position
-            star.position.z = -50;
+            star.position.z = -75;
             star.position.x = THREE.MathUtils.randFloatSpread(100);
             star.position.y = THREE.MathUtils.randFloatSpread(100);
           }
