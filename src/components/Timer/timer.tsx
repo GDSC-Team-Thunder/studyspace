@@ -10,6 +10,7 @@ import '../../css/timer.css';
 interface TimerProps {
     hideSidebars: boolean;
     setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
+    userID: string;
   }
 
 interface Section {
@@ -24,14 +25,15 @@ interface SectionsState {
     long: Section;
 }
 
-const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars, userId }) => {
+const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars, userID }) => {
     const [sections, setSections] = useState<SectionsState>({
-        pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
-        short: { duration: 300, symbol: "🌙 ", active: false},
-        long: { duration: 900, symbol: "🌕 ", active: false},
+        pomodoro: { duration: 0, symbol: "⭐ ", active: true},
+        short: { duration: 0, symbol: "🌙 ", active: false},
+        long: { duration: 0, symbol: "🌕 ", active: false},
     })
+
     async function getSections() {
-        axios.get(`http://localhost:8000/timer/${userId}`).then((res) => {
+        axios.get(`http://localhost:8000/timer/${userID}`).then((res) => {
             const pomodoroDuration = res.data.pomodoro;
             const shortDuration = res.data.shortBreak;
             const longDuration = res.data.longBreak;
@@ -41,10 +43,13 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars, userId }) 
                 short: { duration: shortDuration, symbol: "🌙 ", active: false},
                 long: { duration: longDuration, symbol: "🌕 ", active: false},
             });
-            updateTimer();
         });
     }
-    getSections();
+    useEffect(() => {
+        getSections();
+        console.log({sections});
+    });
+    
     const [total, setTotal] = useState<number>(sections.pomodoro.duration);
     const [time, setTime] = useState<string>('');
     const [isRunning, setIsRunning] = useState<boolean>(false);

@@ -171,7 +171,6 @@ app.get("/timer/:id", async (req, res) => {
       shortBreak: user.shortBreak,
       longBreak: user.longBreak,
     });
-    return res.status(200).json();
   } catch (err) {
     return res.status(500).json({ error:err });
   }
