@@ -4,6 +4,7 @@ import { Switch } from '@headlessui/react'
 import Modal from './modal.tsx';
 import Settings from '../../assets/settings-bold.svg';
 import XButton from '../../assets/x-icon.svg';
+import axios from "axios";
 import '../../css/settings.css';
 
 interface Section {
@@ -28,7 +29,7 @@ interface SettingsMenuProps {
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
+const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars, userID}) => {
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
     pomodoro: { name: "pomodoro length:", duration: 0, hours: 0, minutes: 0 },
@@ -127,7 +128,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
     }));
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     setSections(prevState => ({
       ...prevState,
       pomodoro: {
@@ -142,7 +143,15 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSecti
         ...prevState.long,
         duration: sectionItems.long.duration
       }
-    }));
+    }),
+    
+    const updatedTimings = {
+      pomodoro: sectionItems.pomodoro,
+      short: sectionItems.short,
+      long: sectionItems.long
+    };
+    await axios.put(`http://localhost:8000/${userId}`, updatedTimings);
+  };
     
     const activeSection = findActiveSection();
     if (activeSection != null) {

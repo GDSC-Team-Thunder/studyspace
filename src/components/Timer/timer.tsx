@@ -248,6 +248,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars, userID }) 
                         setSections={setSections}
                         hideSidebars={hideSidebars}
                         setHideSidebars={setHideSidebars}
+                        userID={userID}
                         />
                         <button onClick={timerButton} className='timer-button'>{isRunning ? 'pause' : 'start'}</button>
                         <Loop
