@@ -1,6 +1,7 @@
 import Timer from "../Timer/timer.tsx";
 import List from "../ToDoList/List.tsx";
 import Right from "../right.tsx";
+import Header from "./Header.tsx";
 import { useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { useEffect, useState } from "react";
@@ -11,8 +12,8 @@ function Home() {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies(["token"]);
-  const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("varunski");
+  const [userId, setUserId] = useState("1234567891020970934543");
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -39,23 +40,7 @@ function Home() {
 
   return (
     <div className="flex justify-center items-center flex-col h-screen w-screen">
-      <div className="flex flex-row justify-between items-center w-[95vw] mt-5">
-        <p className="flex-grow-0 text-[48px] font-bold">studyspace</p>
-        <div className="flex flex-row ml-auto space-x-4">
-          <p
-            className="flex flex-grow-0 text-[24px] font-bold cursor-pointer"
-            onClick={() => navigate("/Signup")}
-          >
-            sign up
-          </p>
-          <p
-            className="flex flex-grow-0 text-[24px] font-bold cursor-pointer"
-            onClick={() => navigate("/login")}
-          >
-            log in
-          </p>
-        </div>
-      </div>
+      <Header username={username} userId={userId}/>
       <div className="flex flex-grow justify-between flex-row h-[85%] w-[95vw]">
         {!hideSidebars && <List />}
         <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars} />

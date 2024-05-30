@@ -50,6 +50,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
   const [shortBreakText, setShortBreakText] =
     useState<string>("short break 🌙");
   const [longBreakText, setLongBreakText] = useState<string>("long break 🌕");
+  const [buttonWidth, setButtonWidth] = useState<string>("w-40");
 
   //Resize window
   useEffect(() => {
@@ -69,10 +70,12 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
       setPomodoroText("⭐");
       setShortBreakText("🌙");
       setLongBreakText("🌕");
+      setButtonWidth("w-20");
     } else {
       setPomodoroText("pomodoro ⭐");
       setShortBreakText("short break 🌙");
       setLongBreakText("long break 🌕");
+      setButtonWidth("w-40");
     }
   }, [windowWidth]);
 
@@ -256,6 +259,9 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
           (seconds > 9 ? String(seconds) : "0" + String(seconds))
       );
     }
+    else if (total == 0) {
+      
+    }
   };
 
   return (
@@ -289,7 +295,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
           <div className="flex justify-center items-center space-x-2">
             <button
               onClick={pomodoroButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.pomodoro.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
@@ -299,7 +305,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
             </button>
             <button
               onClick={shortButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.short.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
@@ -309,7 +315,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
             </button>
             <button
               onClick={longButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.long.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
