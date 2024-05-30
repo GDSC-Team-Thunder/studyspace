@@ -15,7 +15,7 @@ type SectionKey = "pomodoro" | "short" | "long";
 const Timer = () => {
   const [sections, setSections] = useState({
     pomodoro: { duration: 1500, symbol: "⭐", active: true },
-    short: { duration: 300, symbol: "🌙", active: false },
+    short: { duration: 10, symbol: "🌙", active: false },
     long: { duration: 900, symbol: "🌕", active: false },
   });
   const [currentSection, setCurrentSection] = useState<SectionKey>("pomodoro");
@@ -137,24 +137,22 @@ const Timer = () => {
   };
 
   const queueNext = () => {
-    queue.shift();
-    const newIcon = queue[0];
-
-    const newTime = getDurationBySymbol(newIcon);
-    setTotal(newTime);
-    setElapsedTime(0); // Reset elapsed time
+    const newQueue = [...queue];
+    newQueue.shift();
+    setQueue(newQueue);
+    if (newQueue.length > 0) {
+      const nextSymbol = newQueue[0];
+      setTotal(getDurationBySymbol(nextSymbol));
+      setElapsedTime(0);
+    }
   };
 
   const loopQueueNext = () => {
-    if (loopCurrent === loopQueue.length) {
-      setLoopCurrent(0);
-    } else {
-      setLoopCurrent(loopCurrent + 1);
-    }
-
-    const newTime = getDurationBySymbol(loopQueue[loopCurrent]);
-    setTotal(newTime);
-    setElapsedTime(0); // Reset elapsed time
+    const nextIndex = (loopCurrent + 1) % loopQueue.length;
+    setLoopCurrent(nextIndex);
+    const nextSymbol = loopQueue[nextIndex];
+    setTotal(getDurationBySymbol(nextSymbol));
+    setElapsedTime(0);
   };
 
   const updateTimer = () => {
