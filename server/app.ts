@@ -160,6 +160,23 @@ app.get("/auth", async (req, res) => {
   }
 });
 
+app.get("/timer/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id, 'pomodoro shortBreak longBreak');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    return res.status(200).json({
+      pomodoro: user.pomodoro,
+      shortBreak: user.shortBreak,
+      longBreak: user.longBreak,
+    });
+    return res.status(200).json();
+  } catch (err) {
+    return res.status(500).json({ error:err });
+  }
+});
+
 app.put("/:id", async (req, res) => {
   try {
     const {

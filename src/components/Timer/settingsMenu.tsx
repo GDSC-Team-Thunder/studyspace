@@ -29,8 +29,6 @@ interface SettingsMenuProps {
 }
 
 const SettingsMenu: React.FC<SettingsMenuProps> = ({setTotal, sections, setSections, hideSidebars, setHideSidebars}) => {
-  console.log({sections});
-
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
     pomodoro: { name: "pomodoro length:", duration: 0, hours: 0, minutes: 0 },

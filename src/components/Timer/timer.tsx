@@ -3,6 +3,7 @@ import Reset from '../../assets/trash.svg';
 import Delete from '../../assets/delete-arrow.svg';
 import SettingsMenu from './settingsMenu';
 import Loop from './loop';
+import axios from "axios";
 import 'reactjs-popup/dist/index.css';
 import '../../css/timer.css';
 
@@ -23,12 +24,27 @@ interface SectionsState {
     long: Section;
 }
 
-const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
+const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars, userId }) => {
     const [sections, setSections] = useState<SectionsState>({
         pomodoro: { duration: 1500, symbol: "⭐ ", active: true},
         short: { duration: 300, symbol: "🌙 ", active: false},
         long: { duration: 900, symbol: "🌕 ", active: false},
     })
+    async function getSections() {
+        axios.get(`http://localhost:8000/timer/${userId}`).then((res) => {
+            const pomodoroDuration = res.data.pomodoro;
+            const shortDuration = res.data.shortBreak;
+            const longDuration = res.data.longBreak;
+
+            setSections({
+                pomodoro: { duration: pomodoroDuration, symbol: "⭐ ", active: true},
+                short: { duration: shortDuration, symbol: "🌙 ", active: false},
+                long: { duration: longDuration, symbol: "🌕 ", active: false},
+            });
+            updateTimer();
+        });
+    }
+    getSections();
     const [total, setTotal] = useState<number>(sections.pomodoro.duration);
     const [time, setTime] = useState<string>('');
     const [isRunning, setIsRunning] = useState<boolean>(false);
