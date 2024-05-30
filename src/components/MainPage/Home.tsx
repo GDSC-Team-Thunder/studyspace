@@ -44,8 +44,12 @@ function Home() {
       </h1>
       <div className="flex justify-between flex-row h-screen w-[95vw]">
         {!hideSidebars && <List />}
-        <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars} userID={userId}/>
-        {!hideSidebars && <Right />}
+        <Timer
+          hideSidebars={hideSidebars}
+          setHideSidebars={setHideSidebars}
+          userID={userId}
+        />
+        {!hideSidebars && <Right userId={userId} />}
       </div>
     </div>
   );
