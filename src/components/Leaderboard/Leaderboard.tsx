@@ -18,7 +18,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId }) => {
     miles: string;
   }
   const [friends, setFriends] = useState<Friend[]>([]);
-  console.log(friends);
+  // console.log(friends);
   const [rankings, setRankings] = useState<Ranking[]>([]);
 
   useEffect(() => {

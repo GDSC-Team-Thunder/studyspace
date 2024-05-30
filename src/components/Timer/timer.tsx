@@ -5,10 +5,12 @@ import SettingsMenu from "./settingsMenu";
 import Loop from "./loop";
 import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
+import axios from "axios";
 
 interface TimerProps {
   hideSidebars: boolean;
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
+  userID: string;
 }
 
 interface Section {
@@ -23,11 +25,15 @@ interface SectionsState {
   long: Section;
 }
 
-const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
+const Timer: React.FC<TimerProps> = ({
+  hideSidebars,
+  setHideSidebars,
+  userID,
+}) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 1500, symbol: "⭐ ", active: true },
-    short: { duration: 300, symbol: "🌙 ", active: false },
-    long: { duration: 900, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 15, symbol: "⭐ ", active: true },
+    short: { duration: 3, symbol: "🌙 ", active: false },
+    long: { duration: 9, symbol: "🌕 ", active: false },
   });
   const [total, setTotal] = useState<number>(sections.pomodoro.duration);
   const [time, setTime] = useState<string>("");
@@ -43,6 +49,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [loopCurrent, setLoopCurrent] = useState<number>(0);
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
+  const [timeSpent, setTimeSpent] = useState<number>(0);
 
   useEffect(() => {
     updateTimer();
@@ -58,12 +65,46 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     if (isRunning) {
       const intervalId = setInterval(() => {
         setTotal((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : prevTotal));
+        setTimeSpent((prevTimeSpent) => prevTimeSpent + 1);
       }, 1000);
 
       updateTimer();
       return () => clearInterval(intervalId);
     }
   }, [isRunning, total]);
+
+  useEffect(() => {
+    if (timeSpent > 0 && timeSpent % 60 === 0) {
+      updateUserTimeSpent(timeSpent);
+      setTimeSpent(0);
+    }
+  }, [timeSpent]);
+
+  const updateUserTimeSpent = async (timeSpent: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/${userID}`);
+      if (response.status !== 200) {
+        throw new Error("Failed get");
+      }
+      const currentTimeSpent = response.data.timeSpent ?? 0;
+      const newTimeSpent = currentTimeSpent + timeSpent / 30;
+
+      console.log("miles ", newTimeSpent);
+
+      const updateResponse = await axios.put(
+        `http://localhost:8000/${userID}`,
+        {
+          timeSpent: newTimeSpent,
+        }
+      );
+
+      if (updateResponse.status !== 200) {
+        throw new Error("Failed update");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const timerButton = () => {
     if (isRunning == false) {
