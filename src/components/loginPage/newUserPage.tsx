@@ -87,7 +87,7 @@ export default function NewUserPage() {
             log in
           </button>
           <div className="ml-2 mt-3 flex flex-row self-center underline underline-offset-4">
-            <p className="text-white">already have an account?</p>
+            <p className="text-white mr-2">already have an account? </p>
             <Link to="/login" className="text-[#F32FBC]">
               log in here
             </Link>

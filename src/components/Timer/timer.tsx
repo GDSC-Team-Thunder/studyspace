@@ -32,14 +32,34 @@ const Timer: React.FC<TimerProps> = ({
   userID,
 }) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 15, symbol: "⭐ ", active: true },
-    short: { duration: 3, symbol: "🌙 ", active: false },
-    long: { duration: 9, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 0, symbol: "⭐ ", active: true },
+    short: { duration: 0, symbol: "🌙 ", active: false },
+    long: { duration: 0, symbol: "🌕 ", active: false },
   });
+
+  async function getSections() {
+    axios.get(`http://localhost:8000/timer/${userID}`).then((res) => {
+      const pomodoroDuration = res.data.pomodoro;
+      const shortDuration = res.data.shortBreak;
+      const longDuration = res.data.longBreak;
+
+      setSections({
+        pomodoro: { duration: pomodoroDuration, symbol: "⭐ ", active: true },
+        short: { duration: shortDuration, symbol: "🌙 ", active: false },
+        long: { duration: longDuration, symbol: "🌕 ", active: false },
+      });
+    });
+  }
+  useEffect(() => {
+    getSections();
+    console.log({ sections });
+  });
+
   const [total, setTotal] = useState<number>(sections.pomodoro.duration);
   const [time, setTime] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [queue, setQueue] = useState<string[]>([
+    "⭐ ",
     "⭐ ",
     "🌙 ",
     "⭐ ",
@@ -289,6 +309,7 @@ const Timer: React.FC<TimerProps> = ({
               setSections={setSections}
               hideSidebars={hideSidebars}
               setHideSidebars={setHideSidebars}
+              userID={userID}
             />
             <button onClick={timerButton} className="timer-button">
               {isRunning ? "pause" : "start"}
