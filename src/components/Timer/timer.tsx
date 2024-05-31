@@ -32,10 +32,15 @@ const Timer = () => {
     updateTimer();
 
     if (total === 0) {
-      if (loopQueue.length !== 0) {
+      if (queue.length > 0) {
+        queueNext();
+      } else if (loopQueue.length > 0) {
         loopQueueNext();
       } else {
-        queueNext();
+        setIsRunning(false);  // Stop the timer
+        setElapsedTime(0);
+        setCurrentSection("pomodoro");  // Reset to initial state
+        setTime("00:00");  // Display initial timer state
       }
     }
 
@@ -68,24 +73,36 @@ const Timer = () => {
   };
 
   const pomodoroButton = () => {
-    setCurrentSection("pomodoro");
-    setTotal(sections.pomodoro.duration);
-    setElapsedTime(0); // Reset elapsed time
-    setQueue((prevQueue) => [...prevQueue, sections.pomodoro.symbol]);
+    if (!isRunning && queue.length === 0) {
+        setCurrentSection("pomodoro");
+        setTotal(sections.pomodoro.duration);
+        setElapsedTime(0);
+        setIsRunning(true);
+      } else {
+        setQueue((prevQueue) => [...prevQueue, sections.pomodoro.symbol]);
+      }
   };
-
+  
   const shortButton = () => {
-    setCurrentSection("short");
-    setTotal(sections.short.duration);
-    setElapsedTime(0); // Reset elapsed time
-    setQueue((prevQueue) => [...prevQueue, sections.short.symbol]);
+    if (!isRunning && queue.length === 0) {
+        setCurrentSection("short");
+        setTotal(sections.short.duration);
+        setElapsedTime(0);
+        setIsRunning(true);
+      } else {
+        setQueue((prevQueue) => [...prevQueue, sections.short.symbol]);
+    }
   };
-
+  
   const longButton = () => {
-    setCurrentSection("long");
-    setTotal(sections.long.duration);
-    setElapsedTime(0); // Reset elapsed time
-    setQueue((prevQueue) => [...prevQueue, sections.long.symbol]);
+    if (!isRunning && queue.length === 0) {
+        setCurrentSection("long");
+        setTotal(sections.long.duration);
+        setElapsedTime(0);
+        setIsRunning(true);
+      } else {
+        setQueue((prevQueue) => [...prevQueue, sections.long.symbol]);
+      }
   };
 
   const deleteButton = () => {
@@ -144,8 +161,12 @@ const Timer = () => {
       const nextSymbol = newQueue[0];
       setTotal(getDurationBySymbol(nextSymbol));
       setElapsedTime(0);
+    } else {
+      setIsRunning(false);  // Stop the timer if the queue is empty
+      setElapsedTime(0);
     }
   };
+  
 
   const loopQueueNext = () => {
     const nextIndex = (loopCurrent + 1) % loopQueue.length;
