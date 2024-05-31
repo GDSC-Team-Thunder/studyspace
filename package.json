@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
+    "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-switch": "^1.0.3",
     "@types/three": "^0.162.0",
     "bootstrap": "^5.3.3",

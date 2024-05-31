@@ -6,6 +6,7 @@ import Loop from "./loop";
 import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
 import axios from "axios";
+import ProgressBar from "./ProgressBar";
 
 interface TimerProps {
   hideSidebars: boolean;
@@ -50,6 +51,7 @@ const Timer: React.FC<TimerProps> = ({
   const [loopCurrent, setLoopCurrent] = useState<number>(0);
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
   const [timeSpent, setTimeSpent] = useState<number>(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     updateTimer();
@@ -58,6 +60,7 @@ const Timer: React.FC<TimerProps> = ({
       if (loopQueue.length != 0) {
         loopQueueNext();
       } else {
+        setElapsedTime(0);
         queueNext();
       }
     }
@@ -65,6 +68,8 @@ const Timer: React.FC<TimerProps> = ({
     if (isRunning) {
       const intervalId = setInterval(() => {
         setTotal((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : prevTotal));
+        console.log("elapsed:", elapsedTime, "total", total + elapsedTime);
+        setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
         setTimeSpent((prevTimeSpent) => prevTimeSpent + 1);
       }, 1000);
 
@@ -188,6 +193,7 @@ const Timer: React.FC<TimerProps> = ({
     setIsRunning(false);
     setQueue([]);
     setTotal(0);
+    setElapsedTime(0);
     resetActiveState();
     updateTimer();
   };
@@ -295,6 +301,12 @@ const Timer: React.FC<TimerProps> = ({
             />
           </div>
           <br></br>
+          <div className="my-5">
+            <ProgressBar
+              elapsedTime={elapsedTime}
+              total={total + elapsedTime}
+            />
+          </div>
           <div className="flex justify-center items-center space-x-2">
             <button
               onClick={pomodoroButton}
