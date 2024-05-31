@@ -7,7 +7,7 @@ interface RightProps {
 
 const Right: React.FC<RightProps> = ({ userId }) => {
   return (
-    <div className="relative flex flex-col h-[85%] self-center w-[22.5%] justify-between gap-4">
+    <div className="relative flex flex-col h-[95%] self-center w-[22.5%] justify-between gap-4">
       <Scene />
       <Leaderboard userId={userId} />
     </div>

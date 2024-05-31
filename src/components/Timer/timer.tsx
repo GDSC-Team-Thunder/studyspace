@@ -7,6 +7,7 @@ import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
 import axios from "axios";
 import ProgressBar from "./ProgressBar";
+import myAudio from "../../assets/retro-alarm.mp3";
 
 interface TimerProps {
   hideSidebars: boolean;
@@ -32,9 +33,9 @@ const Timer: React.FC<TimerProps> = ({
   userID,
 }) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 10, symbol: "⭐ ", active: true },
-    short: { duration: 2, symbol: "🌙 ", active: false },
-    long: { duration: 2, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 0, symbol: "⭐ ", active: true },
+    short: { duration: 0, symbol: "🌙 ", active: false },
+    long: { duration: 0, symbol: "🌕 ", active: false },
   });
 
   async function getSections() {
@@ -55,6 +56,7 @@ const Timer: React.FC<TimerProps> = ({
     console.log({ sections });
   });
 
+  const [playAudio, setPlayAudio] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(sections.pomodoro.duration);
   const [time, setTime] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -72,6 +74,64 @@ const Timer: React.FC<TimerProps> = ({
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
   const [timeSpent, setTimeSpent] = useState<number>(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [pomodoroText, setPomodoroText] = useState<string>("pomodoro ⭐");
+  const [shortBreakText, setShortBreakText] =
+    useState<string>("short break 🌙");
+  const [longBreakText, setLongBreakText] = useState<string>("long break 🌕");
+  const [buttonWidth, setButtonWidth] = useState<string>("w-40");
+
+  const audio = new Audio(myAudio);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (playAudio) {
+      audio.play().catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+
+      // Set a timeout to stop the audio after 3 seconds
+      timer = setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        setPlayAudio(false);
+      }, 3000);
+    }
+
+    // Cleanup function to clear the timeout if playAudio changes
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [playAudio]);
+
+  //Resize window
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  //Resize dimensions
+  useEffect(() => {
+    if (windowWidth < 1100) {
+      setPomodoroText("⭐");
+      setShortBreakText("🌙");
+      setLongBreakText("🌕");
+      setButtonWidth("w-20");
+    } else {
+      setPomodoroText("pomodoro ⭐");
+      setShortBreakText("short break 🌙");
+      setLongBreakText("long break 🌕");
+      setButtonWidth("w-40");
+    }
+  }, [windowWidth]);
 
   useEffect(() => {
     updateTimer();
@@ -291,11 +351,14 @@ const Timer: React.FC<TimerProps> = ({
           (seconds > 9 ? String(seconds) : "0" + String(seconds))
       );
     }
+    if (total == 0) {
+      setPlayAudio(true);
+    }
   };
 
   return (
     <div
-      className={`relative flex flex-col bg-bgColor/10 h-[85%] rounded-[25px] self-center justify-center ${
+      className={`relative flex flex-col bg-bgColor/10 h-[95%] rounded-[25px] self-center justify-center ${
         !hideSidebars ? "w-[52%]" : "w-[100%]"
       }`}
     >
@@ -331,33 +394,33 @@ const Timer: React.FC<TimerProps> = ({
           <div className="flex justify-center items-center space-x-2">
             <button
               onClick={pomodoroButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.pomodoro.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              pomodoro ⭐
+              {pomodoroText}
             </button>
             <button
               onClick={shortButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.short.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              short break 🌙
+              {shortBreakText}
             </button>
             <button
               onClick={longButton}
-              className={`text-offWhite text-xl w-40 px-0 py-3 ${
+              className={`text-offWhite text-xl ${buttonWidth} px-0 py-3 ${
                 sections.long.active
                   ? "bg-darkPink hover:bg-orangey"
                   : "bg-darkBlue hover:bg-orangey"
               }`}
             >
-              long break 🌕
+              {longBreakText}
             </button>
           </div>
         </div>
