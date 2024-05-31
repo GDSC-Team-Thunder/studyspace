@@ -7,6 +7,7 @@ import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
 import axios from "axios";
 import ProgressBar from "./ProgressBar";
+import myAudio from "../../assets/retro-alarm.mp3";
 
 interface TimerProps {
   hideSidebars: boolean;
@@ -32,9 +33,9 @@ const Timer: React.FC<TimerProps> = ({
   userID,
 }) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 10, symbol: "⭐ ", active: true },
-    short: { duration: 2, symbol: "🌙 ", active: false },
-    long: { duration: 2, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 0, symbol: "⭐ ", active: true },
+    short: { duration: 0, symbol: "🌙 ", active: false },
+    long: { duration: 0, symbol: "🌕 ", active: false },
   });
 
   async function getSections() {
@@ -81,17 +82,27 @@ const Timer: React.FC<TimerProps> = ({
   const [longBreakText, setLongBreakText] = useState<string>("long break 🌕");
   const [buttonWidth, setButtonWidth] = useState<string>("w-40");
 
-  const audio = new Audio("/digital-alarm-clock.mp3");
+  const audio = new Audio(myAudio);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (playAudio) {
-      audio.play().then(() => {
-        alert("Alarm has finished");
+      audio.play().catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+
+      // Set a timeout to stop the audio after 3 seconds
+      timer = setTimeout(() => {
         audio.pause();
         audio.currentTime = 0;
         setPlayAudio(false);
-      });
+      }, 3000);
     }
+
+    // Cleanup function to clear the timeout if playAudio changes
+    return () => {
+      clearTimeout(timer);
+    };
   }, [playAudio]);
 
   //Resize window
