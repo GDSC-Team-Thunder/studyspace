@@ -55,6 +55,7 @@ const Timer: React.FC<TimerProps> = ({
     console.log({ sections });
   });
 
+  const [playAudio, setPlayAudio] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(sections.pomodoro.duration);
   const [time, setTime] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -80,6 +81,19 @@ const Timer: React.FC<TimerProps> = ({
   const [longBreakText, setLongBreakText] = useState<string>("long break 🌕");
   const [buttonWidth, setButtonWidth] = useState<string>("w-40");
 
+  const audio = new Audio("/digital-alarm-clock.mp3");
+
+  useEffect(() => {
+    if (playAudio) {
+      audio.play().then(() => {
+        alert("Alarm has finished");
+        audio.pause();
+        audio.currentTime = 0;
+        setPlayAudio(false);
+      });
+    }
+  }, [playAudio]);
+
   //Resize window
   useEffect(() => {
     const handleResize = () => {
@@ -93,6 +107,7 @@ const Timer: React.FC<TimerProps> = ({
     };
   }, []);
 
+  //Resize dimensions
   useEffect(() => {
     if (windowWidth < 1100) {
       setPomodoroText("⭐");
@@ -324,7 +339,9 @@ const Timer: React.FC<TimerProps> = ({
           ":" +
           (seconds > 9 ? String(seconds) : "0" + String(seconds))
       );
-    } else if (total == 0) {
+    }
+    if (total == 0) {
+      setPlayAudio(true);
     }
   };
 
