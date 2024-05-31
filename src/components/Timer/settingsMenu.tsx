@@ -5,6 +5,7 @@ import Modal from "./modal.tsx";
 import Settings from "../../assets/settings-bold.svg";
 import XButton from "../../assets/x-icon.svg";
 import "../../css/settings.css";
+import axios from "axios";
 
 interface Section {
   duration: number;
@@ -28,6 +29,7 @@ interface SettingsMenuProps {
   >;
   hideSidebars: boolean;
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
+  userID: string;
 }
 
 const SettingsMenu: React.FC<SettingsMenuProps> = ({
@@ -36,9 +38,8 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({
   setSections,
   hideSidebars,
   setHideSidebars,
+  userID,
 }) => {
-  // console.log({sections});
-
   const [show, setShow] = useState(false);
   const [sectionItems, setSectionItems] = useState({
     pomodoro: { name: "pomodoro length:", duration: 0, hours: 0, minutes: 0 },
@@ -137,7 +138,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({
     }));
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     setSections((prevState) => ({
       ...prevState,
       pomodoro: {
@@ -157,6 +158,16 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({
     const activeSection = findActiveSection();
     if (activeSection != null) {
       setTotal(sectionItems[activeSection].duration);
+    }
+
+    console.log("me want update");
+    const res = await axios.put(`http://localhost:8000/${userID}`, {
+      pomodoro: sectionItems.pomodoro.duration,
+      shortBreak: sectionItems.short.duration,
+      longBreak: sectionItems.long.duration,
+    });
+    if (res.status !== 200) {
+      throw new Error("failed update");
     }
 
     handleClose();

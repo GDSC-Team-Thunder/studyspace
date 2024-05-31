@@ -50,7 +50,7 @@ export default function List() {
             rounded-[25px] self-center w-[22.5%] py-5 px-4 justify-between"
     >
       <div className="flex flex-col">
-        <span className="my-3 ml-1 self-start font-bold text-2xl">
+        <span className="my-2 ml-2 self-start font-bold text-2xl">
           to-do list
         </span>
         <ul className="flex flex-col w-full">
@@ -72,7 +72,7 @@ export default function List() {
       </div>
       <label className="flex flex-row items-center justify-between">
         <input
-          className="flex-grow h-10 pl-3 mr-2.5 rounded-full bg-[#1D006F] placeholder:text-white text-white h-full"
+          className="flex-grow h-10 pl-3 mr-2.5 font-semibold text-gray-200 rounded-full bg-[#1D006F] placeholder:text-white text-white h-full"
           placeholder="add items here..."
           value={addText}
           onChange={(e) => setAddText(e.target.value)}
