@@ -32,9 +32,9 @@ const Timer: React.FC<TimerProps> = ({
   userID,
 }) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 0, symbol: "⭐ ", active: true },
-    short: { duration: 0, symbol: "🌙 ", active: false },
-    long: { duration: 0, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 10, symbol: "⭐ ", active: true },
+    short: { duration: 2, symbol: "🌙 ", active: false },
+    long: { duration: 2, symbol: "🌕 ", active: false },
   });
 
   async function getSections() {
@@ -96,7 +96,7 @@ const Timer: React.FC<TimerProps> = ({
       updateTimer();
       return () => clearInterval(intervalId);
     }
-  }, [isRunning, total]);
+  }, [isRunning, total, elapsedTime]);
 
   useEffect(() => {
     if (timeSpent > 0 && timeSpent % 60 === 0) {
