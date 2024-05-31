@@ -87,7 +87,7 @@ export default function LoginPage() {
             log in
           </button>
           <div className="ml-2 mt-3 flex flex-row self-center underline underline-offset-4">
-            <p className="text-white">Don't have an account?</p>
+            <p className="text-white mr-1">Don't have an account?</p>
             <Link to="/signup" className="text-[#F32FBC]">
               Sign up here.
             </Link>

@@ -46,8 +46,10 @@ export default function List() {
 
   return (
     <div className="relative flex flex-col h-[95%] w-[22.5%] self-center">
-      <div className="relative flex flex-col h-full w-full bg-bgColor/10 
-              rounded-[25px] self-center py-5 px-4 justify-between">
+      <div
+        className="relative flex flex-col h-full w-full bg-bgColor/10 
+              rounded-[25px] self-center py-5 px-4 justify-between"
+      >
         <div className="flex flex-col">
           <span className="my-3 ml-1 self-start font-bold text-2xl">
             to-do list
@@ -83,10 +85,18 @@ export default function List() {
                         addText.length == 0 && "bg-gray-400"
                       }`}
             disabled={addText.length == 0}
-            onClick={addTask}>+</button>
+            onClick={addTask}
+          >
+            +
+          </button>
         </label>
       </div>
-      <iframe className="flex rounded-[12px] w-full bg-transparent mt-3 h-[80px]" src="https://open.spotify.com/embed/playlist/3GJU6WCxTv5jeIhIttI8ae?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"/>
+      <iframe
+        className="flex rounded-[12px] w-full bg-transparent mt-3 h-[80px]"
+        src="https://open.spotify.com/embed/playlist/3GJU6WCxTv5jeIhIttI8ae?utm_source=generator&theme=0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
     </div>
   );
 }

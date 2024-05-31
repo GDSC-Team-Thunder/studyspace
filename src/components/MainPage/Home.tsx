@@ -43,8 +43,12 @@ function Home() {
       <Header username={username} userId={userId}/>
       <div className="flex flex-grow justify-between flex-row h-[85%] w-[95vw]">
         {!hideSidebars && <List />}
-        <Timer hideSidebars={hideSidebars} setHideSidebars={setHideSidebars} />
-        {!hideSidebars && <Right />}
+        <Timer
+          hideSidebars={hideSidebars}
+          setHideSidebars={setHideSidebars}
+          userID={userId}
+        />
+        {!hideSidebars && <Right userId={userId} />}
       </div>
     </div>
   );

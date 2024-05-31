@@ -5,10 +5,13 @@ import SettingsMenu from "./settingsMenu";
 import Loop from "./loop";
 import "reactjs-popup/dist/index.css";
 import "../../css/timer.css";
+import axios from "axios";
+import ProgressBar from "./ProgressBar";
 
 interface TimerProps {
   hideSidebars: boolean;
   setHideSidebars: React.Dispatch<React.SetStateAction<boolean>>;
+  userID: string;
 }
 
 interface Section {
@@ -23,16 +26,40 @@ interface SectionsState {
   long: Section;
 }
 
-const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
+const Timer: React.FC<TimerProps> = ({
+  hideSidebars,
+  setHideSidebars,
+  userID,
+}) => {
   const [sections, setSections] = useState<SectionsState>({
-    pomodoro: { duration: 1500, symbol: "⭐ ", active: true },
-    short: { duration: 300, symbol: "🌙 ", active: false },
-    long: { duration: 900, symbol: "🌕 ", active: false },
+    pomodoro: { duration: 10, symbol: "⭐ ", active: true },
+    short: { duration: 2, symbol: "🌙 ", active: false },
+    long: { duration: 2, symbol: "🌕 ", active: false },
   });
+
+  async function getSections() {
+    axios.get(`http://localhost:8000/timer/${userID}`).then((res) => {
+      const pomodoroDuration = res.data.pomodoro;
+      const shortDuration = res.data.shortBreak;
+      const longDuration = res.data.longBreak;
+
+      setSections({
+        pomodoro: { duration: pomodoroDuration, symbol: "⭐ ", active: true },
+        short: { duration: shortDuration, symbol: "🌙 ", active: false },
+        long: { duration: longDuration, symbol: "🌕 ", active: false },
+      });
+    });
+  }
+  useEffect(() => {
+    getSections();
+    console.log({ sections });
+  });
+
   const [total, setTotal] = useState<number>(sections.pomodoro.duration);
   const [time, setTime] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [queue, setQueue] = useState<string[]>([
+    "⭐ ",
     "⭐ ",
     "🌙 ",
     "⭐ ",
@@ -43,8 +70,9 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [loopCurrent, setLoopCurrent] = useState<number>(0);
   const [loopQueue, setLoopQueue] = useState<string[]>([]);
+  const [timeSpent, setTimeSpent] = useState<number>(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
-  //Resizing hooks
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [pomodoroText, setPomodoroText] = useState<string>("pomodoro ⭐");
   const [shortBreakText, setShortBreakText] =
@@ -86,6 +114,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
       if (loopQueue.length != 0) {
         loopQueueNext();
       } else {
+        setElapsedTime(0);
         queueNext();
       }
     }
@@ -93,12 +122,48 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     if (isRunning) {
       const intervalId = setInterval(() => {
         setTotal((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : prevTotal));
+        console.log("elapsed:", elapsedTime, "total", total + elapsedTime);
+        setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+        setTimeSpent((prevTimeSpent) => prevTimeSpent + 1);
       }, 1000);
 
       updateTimer();
       return () => clearInterval(intervalId);
     }
-  }, [isRunning, total]);
+  }, [isRunning, total, elapsedTime]);
+
+  useEffect(() => {
+    if (timeSpent > 0 && timeSpent % 60 === 0) {
+      updateUserTimeSpent(timeSpent);
+      setTimeSpent(0);
+    }
+  }, [timeSpent]);
+
+  const updateUserTimeSpent = async (timeSpent: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/${userID}`);
+      if (response.status !== 200) {
+        throw new Error("Failed get");
+      }
+      const currentTimeSpent = response.data.timeSpent ?? 0;
+      const newTimeSpent = currentTimeSpent + timeSpent / 30;
+
+      console.log("miles ", newTimeSpent);
+
+      const updateResponse = await axios.put(
+        `http://localhost:8000/${userID}`,
+        {
+          timeSpent: newTimeSpent,
+        }
+      );
+
+      if (updateResponse.status !== 200) {
+        throw new Error("Failed update");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const timerButton = () => {
     if (isRunning == false) {
@@ -182,6 +247,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
     setIsRunning(false);
     setQueue([]);
     setTotal(0);
+    setElapsedTime(0);
     resetActiveState();
     updateTimer();
   };
@@ -258,9 +324,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
           ":" +
           (seconds > 9 ? String(seconds) : "0" + String(seconds))
       );
-    }
-    else if (total == 0) {
-      
+    } else if (total == 0) {
     }
   };
 
@@ -280,6 +344,7 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
               setSections={setSections}
               hideSidebars={hideSidebars}
               setHideSidebars={setHideSidebars}
+              userID={userID}
             />
             <button onClick={timerButton} className="timer-button">
               {isRunning ? "pause" : "start"}
@@ -292,6 +357,12 @@ const Timer: React.FC<TimerProps> = ({ hideSidebars, setHideSidebars }) => {
             />
           </div>
           <br></br>
+          <div className="my-5">
+            <ProgressBar
+              elapsedTime={elapsedTime}
+              total={total + elapsedTime}
+            />
+          </div>
           <div className="flex justify-center items-center space-x-2">
             <button
               onClick={pomodoroButton}
