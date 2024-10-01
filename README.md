@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# StudySpace
+## About
+Introducing a productivity booster that gamifies study sessions. Compete with friends to see who can launch their spaceship the highest, turning academic tasks into a thrilling space race. Elevate your productivity and have fun doing it!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
+- Pomodoro Timer: Utilize the built-in Pomodoro Timer to break your study time into focused intervals with short breaks, enhancing concentration and productivity.
+- Progress Tracking: Visualize your progress as your spaceship flies higher with each passing second.
+- Customizable Goals: Set personalized tasks or study sessions to match your academic needs.
+- Leaderboard: Keep track of who’s leading the productivity space race.
+- Music Player: Listen to calming music during your study sessions by utilizing our embedded spotify player.
 
-Currently, two official plugins are available:
+## Technologies Used
+- Frontend: React, TypeScript, Tailwind CSS
+- Animation: Three.js
+- Backend: Node.js, Express, MongoDB
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br/>
+<br/>
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+###### made with ❤ by Justin, Kyle, Yujin and Varun
